@@ -2,34 +2,37 @@
 
 const fs = require('fs-extra');
 const path = require('path');
-const { exec } = require('child_process');
-const { promisify } = require('util');
-
-const execPromise = promisify(exec);
+const { spawn } = require('child_process');
 
 const templateDir = path.join(__dirname, 'resources');
 const destinationDir = process.cwd();
 
 async function copyTemplate() {
   try {
+    console.log('Copying template files...');
     await fs.copy(templateDir, destinationDir);
     console.log('Template copied successfully!');
-    await installDependencies();
+    installDependencies();
   } catch (err) {
     console.error('Error copying template:', err);
   }
 }
 
-async function installDependencies() {
-  try {
-    console.log('Installing dependencies...');
-    const { stdout, stderr } = await execPromise('npm install');
-    console.log(stdout);
-    console.error(stderr);
-    console.log('Dependencies installed successfully!');
-  } catch (err) {
-    console.error('Error installing dependencies:', err);
-  }
+function installDependencies() {
+  console.log('Starting npm install...');
+  const install = spawn('npm', ['install'], { stdio: 'inherit', shell: true });
+
+  install.on('error', (err) => {
+    console.error('Failed to start npm install:', err);
+  });
+
+  install.on('close', (code) => {
+    if (code !== 0) {
+      console.error(`npm install process exited with code ${code}`);
+    } else {
+      console.log('Dependencies installed successfully!');
+    }
+  });
 }
 
 copyTemplate();
