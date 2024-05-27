@@ -3,7 +3,7 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/applyft-web"
   },
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "a template for creating new web onboardings",
   "main": "copyTemplate.js",
   "repository": {
@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/applyft-web/template#readme",
   "bin": {
-    "ob-template-init": "./copyTemplate.js"
+    "ob-template-init": "./copyTemplate.js",
+    "@applyft-web/template": "./copyTemplate.js"
   },
   "dependencies": {
     "fs-extra": "^11.2.0"
