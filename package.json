@@ -1,0 +1,28 @@
+{
+  "name": "@applyft-web/template",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/applyft-web"
+  },
+  "version": "1.0.0",
+  "description": "a template for creating new web onboardings",
+  "main": "copyTemplate.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applyft-web/template.git"
+  },
+  "author": "Aliaksei Drabushau",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applyft-web/template/issues"
+  },
+  "homepage": "https://github.com/applyft-web/template#readme",
+  "bin": {
+    "init": "./copyTemplate.js"
+  },
+  "scripts": {
+    "init": "node copyTemplate.js"
+  },
+  "dependencies": {
+    "fs-extra": "^11.2.0"
+  }
+}
