@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ModalWrapper = styled.div`
   position: fixed;
-  top: 0;
+  top: -50px;
   left: 0;
   width: 100vw;
   height: 100vh;
@@ -38,7 +38,6 @@ export const Title = styled.h1`
   font-size: 24px;
   line-height: 29px;
   text-align: center;
-  margin: 37px 0 0;
 `;
 
 export const ErrorText = styled.div`

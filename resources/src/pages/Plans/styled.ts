@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { getCssSize } from '../../core/utils';
+import { getCssSize } from '@applyft-web/ui-components';
 
 interface MarginProps {
   readonly $mt?: string | number;
@@ -14,14 +14,6 @@ export const Title = styled.div<MarginProps>`
   white-space: pre-line;
   ${({ $mt }) => $mt && `margin-top: ${getCssSize($mt)}`};
   ${({ $mb }) => $mb && `margin-bottom: ${getCssSize($mb)}`};
-`;
-
-export const GuaranteeText = styled.div`
-  margin-top: 32px;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 20px;
-  text-align: center;
 `;
 
 export const Disclaimer = styled.div`

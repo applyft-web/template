@@ -1,4 +1,4 @@
-// import { sendAFEvent, setAFCustomerId } from './appsflyer';
+import { sendAFEvent, setAFCustomerId } from './appsflyer';
 import { sendAmplitudeData, setAmplitudeUserId } from './amplitude';
 import { sendGismartData, GISMART_EVENTS } from './gismart';
 import { sendLockerStudioData } from './lockerStudio';
@@ -10,7 +10,7 @@ const isDev = ENV === 'development';
 export const sendAnalyticsEvents = (eventName: string, eventParams: any) => {
   const gismartEventName = GISMART_EVENTS[eventName];
 
-  // sendAFEvent(eventName, eventParams);
+  sendAFEvent(eventName, eventParams);
   sendAmplitudeData(eventName, eventParams);
   sendGismartData(gismartEventName ?? eventName, eventParams);
   sendLockerStudioData(gismartEventName ?? eventName, eventParams);
@@ -71,7 +71,7 @@ export const sendPurchaseEvent = (props: PurchaseEventProps) => {
 
 export const setAnalyticsUserId = (userId: string) => {
   setAmplitudeUserId(userId);
-  // setAFCustomerId(userId);
+  setAFCustomerId(userId);
 };
 
 export const pushGoogleTag = (eventName: string, eventParams: any) => {

@@ -40,14 +40,27 @@ const PlansCheckout = (props: any) => {
 
   return (
     <S.Container>
-      <S.PlanContainer $showCheckout={showCheckout} onClick={closeCheckout}>
-        <Plans />
-      </S.PlanContainer>
-      <S.CheckoutContainer $showCheckout={showCheckout}>
-        <MainLayout>
-          <Checkout {...props} />
-        </MainLayout>
-      </S.CheckoutContainer>
+      {props.popupStyle ? (
+        <>
+          <S.PlanContainer $showCheckout={showCheckout} onClick={closeCheckout} $isPopup={true}>
+            <Plans />
+          </S.PlanContainer>
+          <S.CheckoutContainer $showCheckout={showCheckout} $isPopup={true}>
+            <MainLayout>
+              <Checkout {...props} />
+            </MainLayout>
+          </S.CheckoutContainer>
+        </>
+      ) : (
+        <>
+          <S.PlanContainer $showCheckout={showCheckout}>
+            <Plans />
+          </S.PlanContainer>
+          <S.CheckoutContainer $showCheckout={showCheckout}>
+            <Checkout {...props} />
+          </S.CheckoutContainer>
+        </>
+      )}
     </S.Container>
   );
 };

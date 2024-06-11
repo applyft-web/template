@@ -10,8 +10,8 @@ interface MainLayoutProps {
 
 export const MainLayout = ({
   children,
-  pt,
-  pb,
+  pt = 16,
+  pb = 16,
   customStyles,
 }: MainLayoutProps) => (
   <S.StyledLayout

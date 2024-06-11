@@ -10,8 +10,8 @@ export const Input = styled.input<InputProps>`
   width: 100%;
   border-radius: 12px;
   border: none;
-  box-shadow: inset 0 0 0 1px ${({ $error }) => $error ? '#FF5B5B' : '#DEE0E6'};
-  background-color: #404464;
+  box-shadow: inset 0 0 0 1px ${({ $error }) => $error ? '#FF5B5B' : 'rgb(229,229,229)'};
+  background-color: ${({ theme }) => theme?.colors?.inputBg};
   padding: 12px 15px;
   font-size: 16px;
   line-height: 32px;
@@ -43,7 +43,7 @@ export const DomainBtn = styled.button`
   height: 28px;
   min-width: 90px;
   background-color: transparent;
-  border: solid 1px #404464;
+  border: 1px solid rgb(229,229,229);
   border-radius: 10px;
   font-size: 12px;
   line-height: 28px;

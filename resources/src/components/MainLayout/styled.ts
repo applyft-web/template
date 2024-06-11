@@ -1,5 +1,8 @@
 import styled from 'styled-components';
-import { APP_SIDE_PADDING } from '../../core/constants';
+import { theme } from '../../core/theme';
+import { getCssSize } from '@applyft-web/ui-components';
+
+const APP_SIDE_PADDING = theme?.sidePadding || 16;
 
 interface StyledLayoutProps {
   readonly $pt?: string | number;
@@ -12,9 +15,9 @@ export const StyledLayout = styled.div<StyledLayoutProps>`
   height: 100%;
   max-width: 375px;
   margin: 0 auto;
-  padding-top: ${({ $pt }) => $pt ? `${+$pt}${typeof $pt === 'number' ? 'px' : ''}` : '16px'};
+  ${({ $pt }) => $pt && `padding-top: ${getCssSize($pt)}`};
   padding-right: ${APP_SIDE_PADDING}px;
-  padding-bottom: ${({ $pb }) => $pb ? `${+$pb}${typeof $pb === 'number' ? 'px' : ''}` : '16px'};
+  ${({ $pb }) => $pb && `padding-bottom: ${getCssSize($pb)}`};
   padding-left: ${APP_SIDE_PADDING}px;
   display: flex;
   flex-direction: column;

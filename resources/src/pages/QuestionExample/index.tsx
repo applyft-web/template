@@ -1,30 +1,30 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { setEventData } from '../../../core/store/events';
-import { EVENTS } from '../../../core/constants';
+import { setEventData } from '../../core/store/events';
+import { EVENTS } from '../../core/constants';
 import {
   useNextPageName,
   usePreloadNextPage,
   useSendEvents,
   useEngString,
   useCustomNavigate,
-} from '../../../core/hooks';
-import { icons } from './icons';
-import { QuizPageContainer } from '../../../containers';
+} from '../../core/hooks';
+import { QuizPageContainer } from '../../containers';
 
-const Q16 = () => {
+const Q = () => {
   const { t,  } = useTranslation();
   const navigate = useCustomNavigate();
   const dispatch = useDispatch();
   const nextPage = useNextPageName();
   const sendEvents = useSendEvents();
   const getEngString = useEngString();
-  const titleKey = 'memory_skills';
+  const titleKey = 'which_abilities';
   const title: string = t(titleKey);
+  const subtitle: string = t('choose_multiple_options');
   const onContinueClick = (arr: string[]) => {
     const answer = arr.join(', ');
-    const localEventParams = { [titleKey]: answer };
+    const localEventParams = { abilities: answer };
     const eventParams = {
       ...localEventParams,
       question: getEngString(titleKey),
@@ -35,32 +35,26 @@ const Q16 = () => {
     navigate(nextPage);
   };
   const answers = [
-    'recalling_names',
-    'facts_and_information',
-    'passwords_and_codes',
-    'tasks_and_events',
-    'language_vocab',
-    'other',
+    'memory_and_recall',
+    'attention_and_concentration',
+    'problem_solving',
+    'creativity_and_imagination',
+    'language_skills',
+    'decision_making',
+    'emotional_regulation',
+    'stress_management',
+    'learning_efficiency_and_speed',
   ];
-  const answersList = answers.map((answer) => ({
-    content: (
-      <>
-        {icons[answer]}
-        <span>{t(answer)}</span>
-      </>
-    ),
-    key: getEngString(answer),
-  }));
 
   usePreloadNextPage(nextPage);
 
   return (
     <QuizPageContainer
-      {...{ answers, answersList, title }}
+      {...{ answers, title, subtitle }}
       isMultiChoice={true}
       onContinueClick={onContinueClick}
     />
   );
 };
 
-export default Q16;
+export default Q;

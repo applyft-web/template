@@ -33,16 +33,18 @@ Important:
 
 ## Usage
 
-1. **add .env.local file with basic variables:**
+1. **add .env.local file with basic variables. example:**
    ```
    SKIP_PREFLIGHT_CHECK = true
    GENERATE_SOURCEMAP = false
    FAST_REFRESH = false
    REACT_APP_ENV = development
-   
+
+   REACT_APP_PRODUCT_NAME = Geozilla
    REACT_APP_META_TITLE = Example of title
    REACT_APP_META_DESCRIPTION = Example of description
    REACT_APP_META_THEME_COLOR = #000000
+
    REACT_APP_API_URL = https://api.example.com
    REACT_APP_STRIPE_PK = pk_test_key
    REACT_APP_STRIPE_NAME = BrainBloom 1

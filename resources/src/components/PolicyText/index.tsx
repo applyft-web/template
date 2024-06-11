@@ -3,7 +3,7 @@ import { EVENTS, POLICY_LINK, TERMS_LINK } from '../../core/constants';
 import { useSendEvents } from '../../core/hooks';
 import * as S from './styled';
 
-export const BottomText = () => {
+export const PolicyText = () => {
   const sendEvents = useSendEvents();
   const onLinkClick = (type: string) => {
     if (!type) return;

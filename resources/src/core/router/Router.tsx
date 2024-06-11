@@ -7,28 +7,28 @@ import {
 import { pagesWithProgressBar } from './pagesWithProgressBar';
 import { pagesRoutes , type routesProps } from './pagesConfig';
 import { useCustomNavigate } from '../hooks';
-import { MainLayout, ProgressBar, BottomText } from '../../components';
+import { MainLayout, ProgressBar, PolicyText } from '../../components';
 
 interface RouteWithAppContainerProps {
   element: React.JSX.Element;
-  index: number;
+  progressBarIndex: number;
   withButton?: boolean;
-  withBottomText?: boolean;
+  withPolicyText?: boolean;
   wrapperCustomStyles?: string;
 }
 
 const RouteWithAppContainer = ({
   element,
-  index,
+  progressBarIndex,
   withButton = true,
-  withBottomText,
+  withPolicyText,
   wrapperCustomStyles,
 }: RouteWithAppContainerProps) => {
   const buttonHeight = withButton ? 88 : 0;
-  const textHeight = withBottomText ? 60 : 0;
-  const withProgressBar: boolean = index !== -1;
+  const textHeight = withPolicyText ? 60 : 0;
+  const withProgressBar: boolean = progressBarIndex !== -1;
   const pt = withProgressBar ? 52 : 16;
-  const pb = !withButton && !withBottomText ? 16 : buttonHeight + textHeight;
+  const pb = !withButton && !withPolicyText ? 16 : buttonHeight + textHeight;
 
   return (
     <MainLayout
@@ -39,11 +39,11 @@ const RouteWithAppContainer = ({
       {withProgressBar && (
         <ProgressBar
           totalCount={pagesWithProgressBar.length}
-          currentRoute={index}
+          currentRoute={progressBarIndex}
         />
       )}
       {element}
-      {withBottomText && <BottomText/>}
+      {withPolicyText && <PolicyText/>}
     </MainLayout>
   );
 };
@@ -57,7 +57,7 @@ const routes: routesProps[] = [
 ];
 
 export const Router = () => {
-  const location = useLocation();
+  const { pathname, search } = useLocation();
   const navigate = useCustomNavigate();
 
   useEffect(() => window.scrollTo(0, 0));
@@ -65,9 +65,10 @@ export const Router = () => {
   useEffect(() => {
     const handleBackButton = (event: any) => {
       event.preventDefault();
-      navigate(location.pathname);
+      navigate(pathname);
     };
 
+    window.history.pushState(null, '', `${pathname}${search}`);
     window.addEventListener('popstate', handleBackButton);
 
     return () => {
@@ -86,8 +87,8 @@ export const Router = () => {
         <RouteWithAppContainer
           element={route.element}
           withButton={route.withButton}
-          withBottomText={route.withBottomText}
-          index={pagesWithProgressBar.indexOf(route.path)}
+          withPolicyText={route.withPolicyText}
+          progressBarIndex={pagesWithProgressBar.indexOf(route.path)}
           wrapperCustomStyles={route.wrapperCustomStyles}
         />
       ),

@@ -65,7 +65,7 @@ export const PlansList = ({
       >
         <S.StyledPeriod $isArabic={isArabic}>
           <S.PlanCheck $isActive={isActive} $isArabic={isArabic}>
-            <CheckIcon customStyles={{path: `fill: ${theme.colors.bodyBackground};`}} />
+            <CheckIcon customStyles={{path: `fill: ${theme?.colors?.bodyBackground};`}} />
           </S.PlanCheck>
           <S.PlanTitle>
             <div>{duration}</div>

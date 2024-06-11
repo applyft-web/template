@@ -29,16 +29,11 @@ const ErrorScreen = ({ clearFields }: { clearFields: () => void }) => {
   return (
     <S.ModalWrapper>
       <S.ModalContent>
-        <S.Img />
         <S.Title>{t('payment_declined')}</S.Title>
         <S.ErrorText>{message}</S.ErrorText>
         <S.StyledList $isArabic={isArabic}>{POINTS.map(renderCheckPoints)}</S.StyledList>
       </S.ModalContent>
-      <ContinueButton
-        onClick={tryAgainClick}
-        customId={'try-again-button'}
-        customStyles={'color:#292C44;'}
-      >
+      <ContinueButton onClick={tryAgainClick} customId={'try-again-button'}>
         {t('try_again')}
       </ContinueButton>
     </S.ModalWrapper>

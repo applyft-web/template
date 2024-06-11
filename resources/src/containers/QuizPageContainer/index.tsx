@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDelayedExecute, useEngString } from '../../core/hooks';
-import { OptionsItem, OptionsList } from '@applyft-web/ui-components';
-import { NextButton } from '../../components';
+import { ContinueButton, OptionsItem, OptionsList } from '@applyft-web/ui-components';
 import * as S from './styled';
 
 interface AnswerProps {
@@ -54,37 +53,11 @@ export const QuizPageContainer = ({
     };
     const isActive = activesList.includes(key);
 
-    const customStyles = `
-      .icon-path {
-        transition: fill 0.3s;
-      }
-      ${centred ? 'justify-content: center;' : ''};
-      ${isActive ? `
-        color:#292C44;
-        
-        .icon-path {
-          fill: #292C44;
-        }
-      ` : ''};
-
-      @media (hover:hover) {
-        &:hover {
-          background-color: #FDC21C;
-          color:#292C44;
-          
-          .icon-path {
-            fill: #292C44;
-          }
-        }
-      }
-    `;
-
     return (
       <OptionsItem
         onClick={onItemClick}
         multiChoice={isMultiChoice}
         isActive={isActive}
-        customStyles={customStyles}
         customId={`option-${i+1}`}
         key={i}
       >
@@ -105,7 +78,7 @@ export const QuizPageContainer = ({
         {(answersList || getAnswersList(answers)).map(renderAnswer)}
       </OptionsList>
       {isMultiChoice && (
-        <NextButton
+        <ContinueButton
           onClick={() => onContinueClick(activesList)}
           disabled={activesList.length === 0}
         />

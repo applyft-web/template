@@ -40,7 +40,6 @@ const Success = () => {
         <div>{t('success')}</div>
       </S.Header>
       <S.Wrapper>
-        <S.Image />
         <S.Title>{t('access')}</S.Title>
         <S.List>
           {steps.map(renderSteps)}
@@ -49,7 +48,6 @@ const Success = () => {
           onClick={onButtonClick}
           staticPosition
           mt={24}
-          customStyles={'color:#292C44;text-transform:uppercase;font-weight:700'}
         >
           {t('download_app')}
         </ContinueButton>

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { getCssSize } from '../../core/utils';
+import { getCssSize } from '@applyft-web/ui-components';
 
 interface CommonProps {
   readonly $isArabic?: boolean;
@@ -28,8 +28,8 @@ export const PlanLi = styled.li<CommonProps & { $withLabel: boolean }>`
   flex-direction: ${({ $isArabic }) => $isArabic ? 'row-reverse' : 'row'};
   justify-content: space-between;
   align-items: center;
-  background-color: #404464;
-  border: var(--border-width) solid ${({ $isActive, theme }) => $isActive ? theme.colors.primary : '#5D638F'};
+  background-color: ${({ theme }) => theme?.colors?.planItemBg};
+  border: var(--border-width) solid ${({ $isActive, theme }) => $isActive ? theme?.colors?.primary : theme?.colors?.planItemBorder};
   border-radius: var(--border-radius);
   width: 100%;
   height: 86px;
@@ -46,17 +46,18 @@ export const PlanLi = styled.li<CommonProps & { $withLabel: boolean }>`
       content: attr(data-label);
       display: block;
       width: calc(100% + (var(--border-width)*2));
-      height: 18px;
+      height: 19px;
       position: absolute;
       top: calc(var(--border-width)*(-1));
       left: calc(var(--border-width)*(-1));
-      background-color: ${$isActive ? theme?.colors?.primary : '#515684'};
-      border-bottom: var(--border-width) solid ${$isActive ? theme?.colors?.primary : '#5D638F'};
+      background-color: ${$isActive ? theme?.colors?.primary : theme?.colors?.planItemLabelBg};
+      border: var(--border-width) solid ${$isActive ? theme?.colors?.primary : theme?.colors?.planItemBorder};
       color: ${$isActive ? theme?.colors?.bodyBackground : '#8A8FB2'};
       border-radius: var(--border-radius) var(--border-radius) 0 0;
       font-weight: 600;
       font-size: 12px;
       line-height: 18px;
+      box-sizing: border-box;
     }
   `}
 `;
@@ -76,7 +77,7 @@ export const PlanCheck = styled.div<CommonProps>`
   width: var(--check-size);
   height: var(--check-size);
   border-radius: 50%;
-  border: 1px solid ${({ $isActive, theme }) => $isActive ? '#CF9B08' : '#6D7298'};
+  border: 1px solid ${({ $isActive, theme }) => $isActive ? theme?.colors?.planItemCheckBorder : theme?.colors?.planItemBorder};
   background-color: ${({ $isActive, theme }) => $isActive ? theme?.colors?.primary : theme?.colors?.bodyBackground};
   position: relative;
   margin: ${({ $isArabic }) => $isArabic ? '0 0 0 16px' : '0 16px 0 0'};
@@ -138,7 +139,7 @@ export const PriceWrapper = styled.div<CommonProps>`
   font-size: 60px;
   line-height: 46px;
   text-align: center;
-  color: ${({ $isActive, theme }) => $isActive ? theme.colors.text : '#7F84A7'};
+  color: ${({ $isActive, theme }) => $isActive ? theme?.colors?.text : '#7F84A7'};
   padding-left: 13px;
   position: relative;
 

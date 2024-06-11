@@ -7,7 +7,6 @@ import errorReducer from './error';
 import eventsReducer from './events';
 import loaderReducer from './loader';
 import plansReducer from './plans';
-import quizReducer from './quiz';
 import signupReducer from './signup';
 import appReducer from './app';
 
@@ -23,7 +22,6 @@ const reducers = combineReducers({
   events: eventsReducer,
   loader: loaderReducer,
   plans: plansReducer,
-  quiz: quizReducer,
   signup: signupReducer,
   app: appReducer,
 });
@@ -31,7 +29,7 @@ const reducers = combineReducers({
 const persistConfig = {
   key: 'root',
   storage: sessionStorage,
-  whitelist: ['app', 'events', 'plans', 'quiz', 'signup'],
+  whitelist: ['app', 'events', 'plans', 'signup'],
   version: 0,
   migrate: createMigrate(migrations, { debug: false })
 };

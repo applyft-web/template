@@ -7,7 +7,7 @@ export const Header = styled.div`
   width: 100%;
   height: 48px;
   border-radius: 12px;
-  background-color: #404464;
+  background-color: ${({ theme }) => theme?.colors?.inputBg};
   font-size: 16px;
   line-height: 24px;
 `;
@@ -26,23 +26,14 @@ export const HeaderIcon = styled.div`
 export const Wrapper = styled.div`
   width: 100%;
   border-radius: 12px;
-  padding: 32px 20px;
-  background-color: #404464;
+  background-color: ${({ theme }) => theme?.colors?.inputBg};
   margin-top: 32px;
-`;
-
-export const Image = styled.div`
-  width: 100%;
-  height: 65px;
-  background: url(${'./assets/images/logo.png'}) no-repeat center;
-  background-size: contain;
 `;
 
 export const Title = styled.div`
   font-weight: 700;
   font-size: 20px;
   line-height: 32px;
-  margin-top: 12px;
 `;
 
 export const List = styled.div`
@@ -66,7 +57,7 @@ export const ListItem = styled.div`
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background-color: ${({ theme }) => theme?.colors?.bodyBackground};
+    background-color: ${({ theme }) => theme?.colors?.optionImgInactive};
     margin-right: 16px;
     font-weight: 600;
     font-size: 18px;

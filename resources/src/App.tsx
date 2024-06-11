@@ -2,7 +2,7 @@ import React, { createContext, Suspense } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import './locales/config';
 import { useInitAnalytics, useSetTokens, useInlineScript } from './core/hooks';
-import { AF_SMART_SCRIPT_KEY } from './core/constants';
+import { AF_SMART_SCRIPT_KEY, PRODUCT_NAME } from './core/constants';
 import { oneLinkSmartScript } from './core/scripts';
 import { Router } from './core/router';
 import { GlobalThemeProvider } from '@applyft-web/ui-components';
@@ -20,7 +20,7 @@ const App = () => {
 
   return (
     <Suspense fallback={<FallBackBackground />}>
-      <GlobalThemeProvider projectTheme={'bb'}>
+      <GlobalThemeProvider projectTheme={PRODUCT_NAME} /* projectTheme={'gz'} */>
         <BrowserRouter>
           <Router />
         </BrowserRouter>

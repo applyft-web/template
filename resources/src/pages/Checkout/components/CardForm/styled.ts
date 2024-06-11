@@ -40,15 +40,11 @@ export const StyledFieldWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   height: 54px;
-  background: #404464;
+  background: ${({ theme }) => theme?.colors?.inputBg};
   border: 1px solid #d4dae0;
   border-radius: 12px;
   padding: 0 12px;
   overflow: hidden;
-
-  //& > div {
-  //  height: 100%;
-  //}
 
   &:not(:last-child) {
     margin-bottom: 12px;
@@ -64,10 +60,10 @@ export const StyledInput = styled.input<CommonProps>`
   width: 100%;
   height: 28px;
   font-family: Open Sans, sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 16px;
   line-height: 22px;
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme?.colors?.text};
   background-color: transparent;
   border: none;
   text-align: ${({ $isArabic }) => $isArabic ? 'right' : 'left'};
@@ -81,7 +77,7 @@ export const StyledInput = styled.input<CommonProps>`
   }
 
   &::placeholder {
-    color: #909090;
+    color: #8696A6;
     letter-spacing: 1.2px;
     font-size: 16px;
     line-height: 22px;

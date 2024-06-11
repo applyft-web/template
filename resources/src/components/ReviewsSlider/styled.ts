@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { getCssSize } from '../../core/utils';
-import { APP_SIDE_PADDING } from '../../core/constants';
+import { getCssSize } from '@applyft-web/ui-components';
+import { theme } from '../../core/theme';
 
 interface MarginProps {
   readonly $mt?: string | number;
@@ -11,7 +11,7 @@ interface StaticProps {
   readonly $staticMode?: boolean;
 }
 
-export const SLIDER_ITEM_MARGIN = APP_SIDE_PADDING;
+export const SLIDER_ITEM_MARGIN = theme?.sidePadding || 16;
 
 export const ReviewsContainer = styled.div<MarginProps>`
   display: flex;
@@ -31,7 +31,7 @@ export const ReviewsBlock = styled.div<StaticProps>`
 `;
 
 export const ReviewsItem = styled.div<StaticProps>`
-  background-color: #404464;
+  background-color: ${({ theme }) => theme?.colos?.reviewItemBg};
   border: 1px solid #DEE0E6;
   border-radius: 12px;
   flex: 1 0 calc(100vw - ${SLIDER_ITEM_MARGIN*2}px);

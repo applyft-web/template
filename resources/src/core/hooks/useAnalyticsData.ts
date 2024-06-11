@@ -27,7 +27,7 @@ export const useAnalyticsData = () => {
   const eventsData = useSelector(selectEventsData);
   const userUuid = useSelector(selectUuid);
   const { fbclid, gclid, ttclid, appDomain } = eventsData;
-  // const AFUserID = Cookies.get('afUserId');
+  const AFUserID = Cookies.get('afUserId');
   const fbc = Cookies.get(FBC_PARAM);
   const fbp = Cookies.get(FBP_PARAM);
   const ttp = Cookies.get(TTP_PARAM);
@@ -55,7 +55,7 @@ export const useAnalyticsData = () => {
   useEffect(() => {
     setData(
       {
-        // appsflyer_id: AFUserID,
+        appsflyer_id: AFUserID,
         google_tracking_id: GOOGLE_MEASUREMENT_ID,
         google_client_id: cid || "",
         ...activePixelData,
@@ -67,7 +67,7 @@ export const useAnalyticsData = () => {
         }
       }
     );
-  }, [cid, userUuid, fbc, fbp, fbclid, gclid, encodedSource , activePixelData, activePixelUserData]);
+  }, [AFUserID, cid, userUuid, fbc, fbp, fbclid, gclid, encodedSource , activePixelData, activePixelUserData]);
 
   return data;
 };

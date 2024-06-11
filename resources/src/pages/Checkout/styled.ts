@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { getCssSize } from '@applyft-web/ui-components';
 
 export const Title = styled.div`
   font-weight: 700;
@@ -6,7 +7,7 @@ export const Title = styled.div`
   line-height: 36px;
 `;
 
-export const BackButton = styled.div`
+export const BackButtonWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
@@ -16,6 +17,7 @@ export const BackButton = styled.div`
   top: 0;
   left: 0;
   background-color: ${({ theme }) => theme?.colors?.bodyBackground};
+  z-index: 1;
 `;
 
 export const PaymentRequestContainer = styled.div`
@@ -79,5 +81,6 @@ export const CardIconsList = styled.div<MarginProps>`
   justify-content: center;
   align-items: center;
   column-gap: 2px;
-  margin-top: 8px;
+  ${({ $mt }) => $mt && `margin-top: ${getCssSize($mt)}`};
+  ${({ $mb }) => $mb && `margin-bottom: ${getCssSize($mb)}`};
 `;

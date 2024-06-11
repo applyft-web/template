@@ -9,8 +9,8 @@ export const ProgressWrapper = styled.div<ProgressWrapperProps>`
   ${({ $size }) => $size && `
     width: ${$size}px;
     height: ${$size}px;
-  `};
-  box-shadow: inset 0 0 0 12px #404464;
+  `};;
+  box-shadow: inset 0 0 0 12px ${({ theme }) => theme?.colors?.circularProgressBg || '$fff'};
   border-radius: 50%;
   position: relative;
   ${({ $customStyles }) => $customStyles}

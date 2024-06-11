@@ -1,18 +1,5 @@
 import styled from 'styled-components';
 
-export const Title = styled.div`
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 19px;
-  margin-top: 24px;
-`;
-
-export const ProgressWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
 export const Percentage = styled.p`
   font-weight: 700;
   font-size: 40px;

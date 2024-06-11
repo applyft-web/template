@@ -2,17 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { isAndroid, isDesktop, isIOS, osName, osVersion } from 'react-device-detect';
-import { useSendEvents } from '../../core/hooks';
+import { useCustomNavigate, useNextPageName, useSendEvents } from '../../core/hooks';
 import { EVENTS } from '../../core/constants';
 import { setPaywallType } from '../../core/store/plans';
 import { setEventData } from '../../core/store/events';
 import { setAmplitudeUserProperties } from '../../analytics';
 import { useLandingType, queryParser } from '@applyft-web/utils';
 import { landingTypesList } from '../../core/router';
-import { Q1 } from '../quiz';
+import { ContinueButton } from '@applyft-web/ui-components';
 
 const WelcomeScreen = () => {
   const dispatch = useDispatch();
+  const navigate = useCustomNavigate();
+  const nextPage = useNextPageName();
   const location = useLocation();
   const sendEvents = useSendEvents();
   const [eventParams, setEventParams] = useState(false);
@@ -87,7 +89,22 @@ const WelcomeScreen = () => {
     if (eventParams) sendEvents(EVENTS.ONBOARDING_STARTED);
   }, [eventParams, sendEvents]);
 
-  return <Q1 />;
+  return (
+    <>
+      <div>
+        <h1>Developer!</h1>
+        <br/>
+        <p>Don't forget to set up: <mark>constants</mark>, <mark>router</mark>, <mark>store</mark> and <mark>theme</mark> (if you are using custom one) in <b>core</b></p>
+        <br/>
+        <p>You also have to set environments variables according the example: <a href={'https://github.com/applyft-web/template/blob/main/README.md#usage'} target={'_blank'} rel={'noreferrer'} style={{color: 'aquamarine'}}>github.com/applyft-web/template</a></p>
+        <br/>
+        <p>Add your own pages, components, etc. Modify existing ones. Remove what you don't need.</p>
+        <br/>
+        <p>Enjoy! (:</p>
+      </div>
+      <ContinueButton onClick={() => navigate(nextPage)} customStyles={'bottom: 60px'} />
+    </>
+  );
 };
 
 export default WelcomeScreen;

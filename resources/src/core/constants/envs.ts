@@ -1,4 +1,5 @@
 export const ENV = process.env.REACT_APP_ENV;
+export const PRODUCT_NAME = process.env.REACT_APP_PRODUCT_NAME;
 export const API_URL = process.env.REACT_APP_API_URL;
 export const DEFAULT_STRIPE_PK = process.env.REACT_APP_STRIPE_PK;
 export const DEFAULT_STRIPE_NAME = process.env.REACT_APP_STRIPE_NAME;

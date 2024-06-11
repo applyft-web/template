@@ -3,6 +3,7 @@
 declare namespace NodeJS {
   interface ProcessEnv {
     REACT_APP_ENV: 'development' | 'production';
+    REACT_APP_PRODUCT_NAME: string;
     REACT_APP_META_TITLE: string;
     REACT_APP_META_DESCRIPTION: string;
     REACT_APP_META_THEME_COLOR: string;

@@ -14,14 +14,7 @@ import { EVENTS } from '../../core/constants';
 import { useAnalyticsData, useDelayedExecute } from '../../core/hooks';
 import { PLANS, COUPONS, sendAnalyticsEvents } from '../../analytics';
 import { ArabicContext } from '../../App';
-import {
-  ComparisonBlock,
-  Steps,
-  PeopleCount,
-  GuaranteeBlock,
-  PaymentIcons,
-  ScreensSlider,
-} from './components';
+import { PaymentIcons } from './components';
 import { ReviewsBlock, PlansList, type PlanProps } from '../../components';
 import { ContinueButton } from '@applyft-web/ui-components';
 import * as S from './styled';
@@ -115,8 +108,6 @@ export const Plans = () => {
 
   return (
     <>
-      <ComparisonBlock />
-      <S.Title $mt={56}>{t('choose_your_plan')}</S.Title>
       <PlansList
         plans={plans}
         activePlan={activePlan}
@@ -124,26 +115,15 @@ export const Plans = () => {
         isArabic={isArabic}
         mt={24}
       />
-      <S.GuaranteeText>{t('guarantee')}</S.GuaranteeText>
       <ContinueButton
         onClick={onContinueClick}
-        customStyles={'color:#292C44;font-weight:700;'}
         staticPosition
         mt={16}
         customId={'paywall-continue-button-1'}
-      >
-        {t('get_my_plan')}
-      </ContinueButton>
+      />
       <S.Disclaimer>{t('disclaimer', { price: `${planDetails?.currencySymbol}${planDetails?.price}`, duration: planDetails?.duration})}</S.Disclaimer>
       <PaymentIcons />
-      <S.Title $mt={56}>{t('what_you_get')}</S.Title>
-      <Steps />
-      <S.Title $mt={56}>{t('what_is_inside')}</S.Title>
-      <ScreensSlider />
-      <S.Title $mt={56}>{t('ppl_like')}</S.Title>
-      <PeopleCount />
       <ReviewsBlock staticMode shortList mt={16} />
-      <GuaranteeBlock />
     </>
   );
 };

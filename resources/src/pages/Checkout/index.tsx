@@ -48,7 +48,8 @@ import {
 } from '../../core/hooks';
 import { StripeCard } from './components/Stripe';
 import ErrorScreen from './components/ErrorScreen';
-import PlanInfoBlock from './components/PlanInfoBlock';
+import { CrossIcon } from './components/icons';
+import { theme } from '../../core/theme';
 import { ContinueButton } from '@applyft-web/ui-components';
 import * as S from './styled';
 
@@ -56,10 +57,10 @@ const textAlign = navigator.language.startsWith('ar') ? 'right' : 'left';
 
 const stripeFieldsStyle = {
   base: {
-    color: '#fff',
+    color: theme?.colors?.text,
     fontSize: '16px',
     lineHeight: '22px',
-    fontWeight: 300,
+    fontWeight: 400,
     fontFamily: 'Open Sans, sans-serif',
     textAlign,
 
@@ -311,17 +312,15 @@ export const Checkout = () => {
 
   return (
     <div className={'scrollable'}>
-      <S.BackButton onClick={onBackClick} id='come-back-button'>
-        <svg className={'cross-icon'} width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fillRule="evenodd" clipRule="evenodd" d="M9.27817 7.15685L13.8744 2.56066C14.4602 1.97487 14.4602 1.02513 13.8744 0.43934C13.2886 -0.146447 12.3388 -0.146447 11.753 0.43934L7.15685 5.03553L2.56066 0.43934C1.97487 -0.146447 1.02513 -0.146447 0.43934 0.43934C-0.146447 1.02513 -0.146447 1.97487 0.43934 2.56066L5.03553 7.15685L0.43934 11.753C-0.146447 12.3388 -0.146447 13.2886 0.43934 13.8744C1.02513 14.4602 1.97487 14.4602 2.56066 13.8744L7.15685 9.27817L11.753 13.8744C12.3388 14.4602 13.2886 14.4602 13.8744 13.8744C14.4602 13.2886 14.4602 12.3388 13.8744 11.753L9.27817 7.15685Z" fill="#8A8FB2"/>
-        </svg>
-      </S.BackButton>
+      <S.BackButtonWrapper>
+        <CrossIcon onClick={onBackClick} id='come-back-button' />
+      </S.BackButtonWrapper>
       <S.Title>{t(isOnlyCardMethod ? 'checkout' : 'select_payment_method')}</S.Title>
       {!isOnlyCardMethod && (
         <S.Tabs>
           <S.TabItem onClick={() => setActiveTab('card')} $isActive={activeTab === 'card'}>
             {t('credit_card')}
-            <S.CardIconsList $mb={16}>{CARD_BRANDS.map(renderBrand)}</S.CardIconsList>
+            <S.CardIconsList $mt={8} $mb={16}>{CARD_BRANDS.map(renderBrand)}</S.CardIconsList>
           </S.TabItem>
           {paymentRequest && wallet && (
             <S.TabItem onClick={() => setActiveTab('wallet')} $isActive={activeTab === 'wallet'}>
@@ -330,7 +329,6 @@ export const Checkout = () => {
           )}
         </S.Tabs>
       )}
-      <PlanInfoBlock {...{planDetails, couponDetails}} />
       <S.PaymentBlock $show={activeTab === 'card'}>
         {
           load && (
@@ -348,7 +346,6 @@ export const Checkout = () => {
           disabled={!isFormValid}
           onClick={() => stripePurchaseClick(null)}
           staticPosition
-          customStyles={'color:#292C44;'}
           mt={24}
           customId={`${isBraintree ? 'braintree' : 'stripe'}-continue-button`}
         />
