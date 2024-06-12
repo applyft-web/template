@@ -71,7 +71,7 @@ Important:
    └── package.json
    ```
 
-3. **cover the app with GlobalThemeProvider. use one of 4 mounted themes or your custom theme (more info: [ui-components/GlobalThemeProvider](https://applyft-web.github.io/ui-components/?path=/story/core-globalthemeprovider--global-theme-provider-story-template))**
+3. **cover the app with GlobalThemeProvider. Use one of the mounted themes or your custom theme (more info: [ui-components/GlobalThemeProvider](https://applyft-web.github.io/ui-components/?path=/story/core-globalthemeprovider--global-theme-provider-story-template))**
    ```
    <GlobalThemeProvider projectTheme={'Geozilla'}>
      ...

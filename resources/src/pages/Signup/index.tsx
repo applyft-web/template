@@ -21,8 +21,8 @@ import {
 } from '../../core/hooks';
 import { setEventData } from '../../core/store/events';
 import { EVENTS } from '../../core/constants';
-import { ReviewsBlock, SignupInput } from '../../components';
-import { ContinueButton } from '@applyft-web/ui-components';
+import { ReviewsBlock } from '../../components';
+import { ContinueButton, SignupInput } from '@applyft-web/ui-components';
 
 // eslint-disable-next-line
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

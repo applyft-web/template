@@ -6,7 +6,7 @@ import { useGenerateDeepLink, useSendEvents } from '../../core/hooks';
 import { EVENTS } from '../../core/constants';
 import { Plans } from '../Plans';
 import { Checkout } from '../Checkout';
-import { MainLayout } from '../../components';
+import { MainLayout } from '@applyft-web/ui-components';
 import * as S from './styled';
 
 const PlansCheckout = (props: any) => {

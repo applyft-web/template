@@ -7,7 +7,7 @@ import {
   useSendEvents,
   useCustomNavigate,
 } from '../../core/hooks';
-import { CreatingAnimation } from '../../components';
+import { CreatingAnimation } from '@applyft-web/ui-components';
 
 const CreatingProfile = () => {
   const navigate = useCustomNavigate();
@@ -32,10 +32,7 @@ const CreatingProfile = () => {
   }, [animationDone, navigate, nextPage, delayedExecute]);
 
   return (
-    <CreatingAnimation
-      duration={5}
-      doneCallback={(res) => setAnimationDone(res)}
-    />
+    <CreatingAnimation doneCallback={(res) => setAnimationDone(res)} />
   );
 };
 

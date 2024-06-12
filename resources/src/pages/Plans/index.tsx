@@ -15,8 +15,8 @@ import { useAnalyticsData, useDelayedExecute } from '../../core/hooks';
 import { PLANS, COUPONS, sendAnalyticsEvents } from '../../analytics';
 import { ArabicContext } from '../../App';
 import { PaymentIcons } from './components';
-import { ReviewsBlock, PlansList, type PlanProps } from '../../components';
-import { ContinueButton } from '@applyft-web/ui-components';
+import { ReviewsBlock } from '../../components';
+import { ContinueButton, PlansList, type PlanProps } from '@applyft-web/ui-components';
 import * as S from './styled';
 
 export const Plans = () => {

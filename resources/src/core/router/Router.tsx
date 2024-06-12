@@ -7,7 +7,8 @@ import {
 import { pagesWithProgressBar } from './pagesWithProgressBar';
 import { pagesRoutes , type routesProps } from './pagesConfig';
 import { useCustomNavigate } from '../hooks';
-import { MainLayout, ProgressBar, PolicyText } from '../../components';
+import { PolicyText } from '../../components';
+import { ProgressBar, MainLayout } from '@applyft-web/ui-components';
 
 interface RouteWithAppContainerProps {
   element: React.JSX.Element;

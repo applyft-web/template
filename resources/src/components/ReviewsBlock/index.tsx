@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ReviewsSlider, type ReviewProps } from '../ReviewsSlider';
+import { ReviewsSlider, type ReviewProps } from '@applyft-web/ui-components';
 
 interface ReviewsBlockProps {
   shortList?: boolean;
