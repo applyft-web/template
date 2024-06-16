@@ -6,9 +6,10 @@ import { useCustomNavigate, useNextPageName, useSendEvents } from '../../core/ho
 import { EVENTS } from '../../core/constants';
 import { setPaywallType } from '../../core/store/plans';
 import { setEventData } from '../../core/store/events';
+import { setFlow } from '../../core/store/app';
 import { setAmplitudeUserProperties } from '../../analytics';
 import { useLandingType, queryParser } from '@applyft-web/utils';
-import { landingTypesList } from '../../core/router';
+import { landingTypesList, getFlow } from '../../core/router';
 import { ContinueButton } from '@applyft-web/ui-components';
 
 const WelcomeScreen = () => {
@@ -23,6 +24,9 @@ const WelcomeScreen = () => {
 
   useEffect(() => {
     if (eventParams || !paywallType) return;
+
+    const flow = getFlow(paywallType);
+    if (flow) dispatch(setFlow(flow));
 
     dispatch(setPaywallType(paywallType));
     const { fbclid, gclid, ttclid, ...utms } = queryParser(location.search);

@@ -10,15 +10,6 @@ import {
 } from './lazyComponents';
 import { landingTypesList } from './landingTypes';
 
-export const defaultFlow: string[] = [
-  '/',
-  '/q',
-  '/creating-profile',
-  '/signup',
-  '/checkout',
-  '/success',
-];
-
 export interface configProps {
   readonly component: LazyComponentWithPreload<React.ComponentType<any>>;
   readonly images?: string[];

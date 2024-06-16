@@ -22,7 +22,7 @@ export const BackButtonWrapper = styled.div`
 
 export const PaymentRequestContainer = styled.div`
   width: 100%;
-  max-width: 330px;
+  max-width: ${({ theme }) => theme?.maxContentWidth}px;
   margin-bottom: 24px;
 
   div iframe {
