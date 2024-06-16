@@ -49,28 +49,32 @@ import {
 import { StripeCard } from './components/Stripe';
 import ErrorScreen from './components/ErrorScreen';
 import { CrossIcon } from './components/icons';
-import { theme } from '../../core/theme';
 import { ContinueButton } from '@applyft-web/ui-components';
+import { useTheme } from 'styled-components';
 import * as S from './styled';
 
 const textAlign = navigator.language.startsWith('ar') ? 'right' : 'left';
 
-const stripeFieldsStyle = {
-  base: {
-    color: theme?.colors?.text,
-    fontSize: '16px',
-    lineHeight: '22px',
-    fontWeight: 400,
-    fontFamily: 'Open Sans, sans-serif',
-    textAlign,
+const useStripeStyles = () => {
+  const theme = useTheme();
 
-    '::placeholder': {
-      color: '#8696A6',
-      letterSpacing: '1.2px',
+  return {
+    base: {
+      color: theme?.colors?.text,
       fontSize: '16px',
       lineHeight: '22px',
+      fontWeight: 400,
+      fontFamily: 'Open Sans, sans-serif',
+      textAlign,
+
+      '::placeholder': {
+        color: '#8696A6',
+        letterSpacing: '1.2px',
+        fontSize: '16px',
+        lineHeight: '22px',
+      },
     },
-  },
+}
 };
 
 export const Checkout = () => {
@@ -111,6 +115,7 @@ export const Checkout = () => {
   const CARD_BRANDS = ['visa', 'mastercard', 'maestro', 'discover'];
   const isBraintree = paymentProvider === 'braintree';
   const isOnlyCardMethod = !wallet;
+  const stripeFieldsStyle = useStripeStyles();
 
   const renderBrand = (card: string) => {
     if (!card || !CARD_BRANDS.includes(card)) return null;
@@ -246,6 +251,7 @@ export const Checkout = () => {
         setLoad(true);
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stripePromise]);
 
   useLayoutEffect(() => {

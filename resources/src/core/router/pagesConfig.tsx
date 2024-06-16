@@ -9,7 +9,6 @@ import {
   type LazyComponentWithPreload,
 } from './lazyComponents';
 import { landingTypesList } from './landingTypes';
-import { theme } from '../theme';
 
 export const defaultFlow: string[] = [
   '/',
@@ -85,12 +84,8 @@ export interface routesProps {
 const pagesWithoutFixedButton = ['/creating-profile', '/checkout', '/success'];
 
 export const pagesRoutes: routesProps[] = Object.keys(pagesConfig).map((path) => {
-  const customStyles: { [key: string]: string } = {
-    '/checkout': `
-      @media screen and (min-width: ${theme?.tabletMinWidth}px) {
-        justify-content: flex-start;
-      }
-    `,
+  const customStyles: { [key: string]: any } = {
+    '/checkout': { tablet: 'justify-content: flex-start;' },
     '/creating-profile': 'justify-content: space-between;',
   };
   const componentsProps: { [key: string]: object } = {
