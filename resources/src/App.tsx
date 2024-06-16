@@ -23,15 +23,15 @@ const App = () => {
   useInlineScript(oneLinkSmartScript, AF_SMART_SCRIPT_KEY);
 
   return (
-    <Suspense fallback={<FallBack />}>
-      <GlobalThemeProvider projectTheme={PRODUCT_NAME} /* projectTheme={'gz'} */>
+    <GlobalThemeProvider projectTheme={PRODUCT_NAME} /* projectTheme={'gz'} */>
+      <Suspense fallback={<FallBack />}>
         <BrowserRouter>
           <Router />
         </BrowserRouter>
         <Alert isArabic={isArabic} />
         <Loader show={show} message={message} />
-      </GlobalThemeProvider>
-    </Suspense>
+      </Suspense>
+    </GlobalThemeProvider>
   );
 };
 
