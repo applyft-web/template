@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { isAndroid, isDesktop, isIOS, osName, osVersion } from 'react-device-detect';
 import { useCustomNavigate, useNextPageName, useSendEvents } from '../../core/hooks';
-import { EVENTS } from '../../core/constants';
+import { EVENTS, PRODUCT_NAME } from '../../core/constants';
 import { setPaywallType } from '../../core/store/plans';
 import { setEventData } from '../../core/store/events';
 import { setFlow } from '../../core/store/app';
@@ -56,10 +56,7 @@ const WelcomeScreen = () => {
     const localEventsData = {
       landing_type: `${getOnboardingType()}${landingType}`,
       app_domain: appDomain,
-      app_name: 'BrainBloom',
-      landingType,
-      appDomain,
-      appName: 'BrainBloom',
+      app_name: PRODUCT_NAME,
       fbclid,
       gclid,
       ttclid,

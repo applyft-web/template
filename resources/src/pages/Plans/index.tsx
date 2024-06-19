@@ -80,11 +80,9 @@ export const Plans = () => {
     const { productId, duration, description, periodPrice, price, currency } = planDetails;
     const priceWithCoupon = (periodPrice - couponDetails.price).toFixed(2)
     const planData = {
-      Value: price,
       value: Math.round(price * 100),
       currency: currency || "USD",
       price: periodPrice,
-      Duration: duration,
       duration,
       description,
       periodPrice: priceWithCoupon,

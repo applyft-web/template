@@ -137,9 +137,9 @@ export const Checkout = () => {
   ) => {
     if (stripeInstance && card.current) {
       const paymentMethodName = paymentMethod?.walletName ?? 'Stripe';
-      const paymentCardBrandName = eventsData.cardBrand ?? 'unknown';
+      const paymentCardBrandName = eventsData.card_brand ?? 'unknown';
       // TODO check card prop
-      // paymentMethod?.card?.brand ?? eventsData.cardBrand ?? 'unknown';
+      // paymentMethod?.card?.brand ?? eventsData.card_brand ?? 'unknown';
       const paymentMethodObj = paymentMethod
         ? {
           methodName: paymentMethodName,
@@ -147,8 +147,8 @@ export const Checkout = () => {
         }
         : null;
       const localEventsData = {
+        payment_processor: 'Stripe',
         payment_method: paymentMethodName,
-        cardBrand: paymentCardBrandName,
         card_brand: paymentCardBrandName,
         stripe_account_name: stripeAccountName,
       };

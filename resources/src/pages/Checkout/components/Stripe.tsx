@@ -99,7 +99,6 @@ export const StripeCard = ({
     if (cardBrand && eventsData && eventsData.card_brand !== cardBrand) {
       const localEventData = {
         card_brand: cardBrand,
-        cardBrand: cardBrand,
       };
       dispatch(setEventData(localEventData));
       sendEvents(EVENTS.CARD_BRAND_CHOSEN, localEventData);
