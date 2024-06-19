@@ -51,6 +51,7 @@ export const TabItem = styled.div<{ $isActive: boolean }>`
   justify-content: center;
   width: 106px;
   height: 75px;
+  flex-grow: 1;
   flex-shrink: 0;
   padding: 0 8px;
   background-color: #404464;
@@ -60,13 +61,14 @@ export const TabItem = styled.div<{ $isActive: boolean }>`
   font-size: 12px;
   line-height: 1;
   letter-spacing: -0.01em;
+  ${({ $isActive }) => !$isActive ? 'opacity: .5;' : ''};
 `;
 
 export const WalletIcon = styled.div<{ $img: string }>`
   width: 90%;
   height: 90%;
   background-image: url(${({ $img }) => `./assets/images/wallets/${$img}.png`});
-  background-size: contain;
+  background-size: auto 40px;
   background-position: center;
   background-repeat: no-repeat;
 `;

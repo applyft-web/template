@@ -326,7 +326,7 @@ export const Checkout = () => {
         <S.Tabs>
           <S.TabItem onClick={() => setActiveTab('card')} $isActive={activeTab === 'card'}>
             {t('credit_card')}
-            <S.CardIconsList $mt={8} $mb={16}>{CARD_BRANDS.map(renderBrand)}</S.CardIconsList>
+            <S.CardIconsList $mt={8}>{CARD_BRANDS.map(renderBrand)}</S.CardIconsList>
           </S.TabItem>
           {paymentRequest && wallet && (
             <S.TabItem onClick={() => setActiveTab('wallet')} $isActive={activeTab === 'wallet'}>

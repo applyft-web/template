@@ -82,7 +82,7 @@ export const Plans = () => {
     const planData = {
       value: Math.round(price * 100),
       currency: currency || "USD",
-      price: periodPrice,
+      price,
       duration,
       description,
       periodPrice: priceWithCoupon,
