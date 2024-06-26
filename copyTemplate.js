@@ -18,6 +18,8 @@ async function copyTemplate() {
     console.log('Copying template files from', templateDir, 'to', destinationDir);
     await fs.copy(templateDir, destinationDir);
     console.log('Template copied successfully!');
+    console.log('Make sure you\'ve just copied the latest version of the template!');
+    console.log('Template version: ' + require('./package.json').version);
     installDependencies();
   } catch (err) {
     console.error('Error copying template:', err);

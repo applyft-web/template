@@ -23,6 +23,10 @@ To use this template in a new project, follow these steps:
     ```
     npx @applyft-web/template
     ```
+   note: if you install the template not for the first time, you may need to clean the npm cache before running the template again (to make sure that the latest version of the template is used):
+   ```
+   npm cache clean --force
+   ```
 
 This process will copy the template files and install all necessary dependencies.
 
