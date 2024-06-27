@@ -24,6 +24,7 @@ Installed package version: ${require('./package.json').version}
 npm package version: https://github.com/applyft-web/template/pkgs/npm/template`,
       'background: #bcad82; color: #333; font-size: 24px;'
     );
+    console.log('');
     installDependencies();
   } catch (err) {
     console.error('Error copying template:', err);
