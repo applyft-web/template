@@ -27,6 +27,11 @@ To use this template in a new project, follow these steps:
    ```
    npm cache clean --force
    ```
+   or install it locally and run init script:
+   ```
+   npm i @applyft-web/template
+   npx ob-template-init
+   ```
 
 This process will copy the template files and install all necessary dependencies.
 

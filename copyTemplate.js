@@ -18,8 +18,9 @@ async function copyTemplate() {
     console.log('Copying template files from', templateDir, 'to', destinationDir);
     await fs.copy(templateDir, destinationDir);
     console.log('Template copied successfully!');
-    console.log('Make sure you\'ve just copied the latest version of the template!');
-    console.log('Template version: ' + require('./package.json').version);
+    console.warn('Make sure you\'ve just copied the latest version of the template!');
+    console.warn('Installed package version: ' + require('./package.json').version);
+    console.warn('npm package version: https://github.com/applyft-web/template/pkgs/npm/template');
     installDependencies();
   } catch (err) {
     console.error('Error copying template:', err);
