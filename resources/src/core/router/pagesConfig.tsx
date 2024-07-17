@@ -1,32 +1,24 @@
 import React from 'react';
-import {
-  WelcomeScreen,
-  QuestionExample,
-  CreatingProfile,
-  Signup,
-  PlansCheckout,
-  Success,
-  type LazyComponentWithPreload,
-} from './lazyComponents';
+import * as LC from './lazyComponents';
 import { landingTypesList } from './landingTypes';
 
 export interface configProps {
-  readonly component: LazyComponentWithPreload<React.ComponentType<any>>;
+  readonly component: LC.LazyComponentWithPreload<React.ComponentType<any>>;
   readonly images?: string[];
 }
 
 export const pagesConfig: { [key: string]: configProps } = {
   ...landingTypesList.reduce((obj: { [key: string]: any }, type: string) => {
     obj[type] = {
-      component: WelcomeScreen,
+      component: LC.WelcomeScreen,
     };
     return obj;
   }, {}),
   '/q': {
-    component: QuestionExample,
+    component: LC.QuestionExample,
   },
   '/creating-profile': {
-    component: CreatingProfile,
+    component: LC.CreatingProfile,
     images: [
       './assets/images/reviewers/review_1.png',
       './assets/images/reviewers/review_2.png',
@@ -37,10 +29,10 @@ export const pagesConfig: { [key: string]: configProps } = {
     ],
   },
   '/signup': {
-    component: Signup,
+    component: LC.Signup,
   },
   '/checkout': {
-    component: PlansCheckout,
+    component: LC.PlansCheckout,
     images: [
       './assets/images/card-brands/amex.png',
       './assets/images/card-brands/discover.png',
@@ -56,7 +48,7 @@ export const pagesConfig: { [key: string]: configProps } = {
     ],
   },
   '/success': {
-    component: Success,
+    component: LC.Success,
     images: [
       './assets/images/logo.png',
     ],

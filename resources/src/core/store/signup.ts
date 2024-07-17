@@ -177,8 +177,8 @@ export const getPaymentSettings = (token: string, attemptNum: number = 0) => (di
       dispatch(setPaymentProvider(paymentGateway));
       dispatch(setStripeData(stripeParams));
       dispatch(setPaymentSettingStatus(status));
+      dispatch(setShowLoader(!status));
     })
-    .then(() => dispatch(setShowLoader(false)))
 };
 
 export const getUserInfo = (token: string) => (dispatch: Dispatch) => {
