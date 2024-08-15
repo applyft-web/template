@@ -7,8 +7,9 @@ export const useSendEvents = ({
 }: { extraPathname?: string } = {}) => {
   const eventsData = useSelector(selectEventsData);
 
-  return (eventName: string, eventParams: object = {}) => {
-    const pathName = { screen_name: (extraPathname || window.location.pathname).replace('/', '') };
+  return (eventName: string, eventParams: {[key: string]: any} = {}) => {
+    // console.count(eventName); // uncomment to check event duplication
+    const pathName = { screen_name: (eventParams?.screen_name || extraPathname || window.location.pathname).replace('/', '') };
     const extendedEventsData = { ...eventsData, ...eventParams, ...pathName };
 
     sendAnalyticsEvents(eventName, extendedEventsData);

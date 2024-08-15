@@ -77,7 +77,7 @@ export const Plans = () => {
     );
   }, [dispatch]);
   const onContinueClick = () => {
-    const { productId, duration, description, periodPrice, price, currency } = planDetails;
+    const { product_id, duration, description, periodPrice, price, currency } = planDetails;
     const priceWithCoupon = (periodPrice - couponDetails.price).toFixed(2)
     const planData = {
       value: Math.round(price * 100),
@@ -86,7 +86,7 @@ export const Plans = () => {
       duration,
       description,
       periodPrice: priceWithCoupon,
-      product_id: productId,
+      product_id,
     };
     dispatch(setEventData(planData));
     sendAnalyticsEvents(EVENTS.PLAN_CHOSEN, {
