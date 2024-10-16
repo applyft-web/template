@@ -98,7 +98,7 @@ interface ServerRequestProps {
     methodName?: string,
     stripeNonce: string,
   };
-  stripe: StripeType;
+  stripe: StripeType | null;
   plan: string;
   token: string;
   analyticsParams: any;
@@ -109,6 +109,17 @@ interface ServerRequestProps {
   upsell?: boolean;
   payment_intent_id?: string;
   coupon?: string;
+}
+
+interface UpsellPurchaseProps {
+  stripeNonce: string;
+  plan: string;
+  token: string;
+  analyticsParams: any;
+  eventsData: any;
+  eventId: string;
+  onSuccessEvents?: any;
+  onErrorEvents?: any;
 }
 
 const sendServerRequest = async ({
@@ -145,7 +156,7 @@ const sendServerRequest = async ({
     };
 
     if (status) {
-      if (status === 'requires_action' && data && data.payment_intent_secret) {
+      if (status === 'requires_action' && data && data.payment_intent_secret && stripe) {
         const cardPaymentSecret = data.payment_intent_secret;
         const cardPaymentData: ConfirmCardPaymentData = methodName
           ? {payment_method: stripeNonce}
@@ -279,7 +290,6 @@ export const stripePurchase = ({
     });
 
     dispatch(setShowLoader(true));
-    sendAnalyticsEvents(EVENTS.PAYMENT_ANIMATION, eventsData);
 
     try {
       if (paymentMethodObj) {
@@ -302,46 +312,45 @@ export const stripePurchase = ({
     }
   };
 
-/*export const sendUpsellPurchaseRequest =
-  (
-    stripeNonce,
-    plan,
-    token,
-    analyticsParams,
-    eventsData,
-    eventId,
-    onSuccessEvents
-  ) =>
-  async (dispatch) => {
-    function onError() {
-      console.log(arguments);
-    }
-    function onSuccess() {
-      if (onSuccessEvents) onSuccessEvents(arguments);
-      // console.log(arguments);
-    }
 
-    dispatch(setCheckoutLoader({ show: true, type: 'checkout' }));
-
-    try {
-      await sendServerReq(
-        null,
-        { stripeNonce },
-        plan,
-        token,
-        analyticsParams,
-        eventsData,
-        onError,
-        onSuccess,
-        eventId,
-        true,
-        '',
-        ''
-      );
-    } finally {
-      dispatch(setCheckoutLoader({ show: false, type: '' }));
-    }
-  };*/
+export const sendUpsellPurchaseRequest = ({
+  stripeNonce,
+  plan,
+  token,
+  analyticsParams,
+  eventsData,
+  eventId,
+  onSuccessEvents,
+  onErrorEvents,
+}: UpsellPurchaseProps) => async (dispatch: any) => {
+  function onError() {
+    if (onErrorEvents) onErrorEvents(arguments);
+  }
+  function onSuccess() {
+    if (onSuccessEvents) onSuccessEvents(arguments);
+  }
+  
+  dispatch(setShowLoader(true));
+  
+  try {
+    await sendServerRequest({
+      stripe: null,
+      paymentMethodObj: { stripeNonce },
+      plan,
+      token,
+      analyticsParams,
+      eventsData,
+      onError,
+      onSuccess,
+      eventId,
+      upsell: true,
+      payment_intent_id: '',
+      coupon: '',
+    });
+  } finally {
+    dispatch(setShowLoader(false));
+  }
+};
 
 interface BraintreePurchaseProps {
   nonce: string;

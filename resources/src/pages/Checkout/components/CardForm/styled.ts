@@ -20,7 +20,7 @@ export const StyledCardFormWrapper = styled.div`
 
 export const StyledCardForm = styled.div`
   width: 100%;
-  min-height: 186px;
+  min-height: 124px;
   border-radius: 20px;
   display: flex;
   flex-flow: row wrap;

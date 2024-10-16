@@ -9,25 +9,31 @@ import {
   setPlanDetails,
   setShowCheckout,
 } from '../../core/store/plans';
-import { setEventData, selectEventsData, setAnalyticsData } from '../../core/store/events';
-import { EVENTS } from '../../core/constants';
-import { useAnalyticsData, useDelayedExecute } from '../../core/hooks';
-import { PLANS, COUPONS, sendAnalyticsEvents } from '../../analytics';
+import { setEventData, setAnalyticsData } from '../../core/store/events';
+import { EVENTS as E } from '../../core/constants';
+import {
+  useAnalyticsData,
+  useDelayedExecute,
+  useEventNameConstructor,
+  useSendEvents,
+} from '../../core/hooks';
+import { PLANS, COUPONS } from '../../analytics';
 import { ArabicContext } from '../../App';
 import { PaymentIcons } from './components';
 import { ReviewsBlock } from '../../components';
 import { ContinueButton, PlansList, type PlanProps } from '@applyft-web/ui-components';
 import * as S from './styled';
 
-export const Plans = () => {
+export const Plans = ({ screenId = 'paywall' }: { screenId?: string }) => {
   const isArabic = useContext(ArabicContext);
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const sendEvents = useSendEvents({ screenId });
+  const getEventName = useEventNameConstructor({ screenId });
   const analyticsData = useAnalyticsData();
   const delayedExecute = useDelayedExecute();
   const activePlan = useSelector(selectPlan);
   const couponDetails = useSelector(selectPlanCoupon);
-  const eventsData = useSelector(selectEventsData);
   const plans = useMemo(() => [
     {
       id: 'bb-monthly-intro7d-699-1499',
@@ -89,10 +95,7 @@ export const Plans = () => {
       product_id,
     };
     dispatch(setEventData(planData));
-    sendAnalyticsEvents(EVENTS.PLAN_CHOSEN, {
-      ...eventsData,
-      ...planData,
-    });
+    sendEvents(getEventName(E.CLICK), { [E.BC]: screenId, ...planData });
     delayedExecute(() => dispatch(setShowCheckout(true)));
   };
 

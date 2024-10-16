@@ -3,9 +3,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import './locales/config';
 import { selectLoader } from './core/store/loader';
-import { useInitAnalytics, useSetTokens, useInlineScript } from './core/hooks';
-import { AF_SMART_SCRIPT_KEY, PRODUCT_NAME } from './core/constants';
-import { oneLinkSmartScript } from './core/scripts';
+import { useInitAnalytics, useSetTokens } from './core/hooks';
+import { PRODUCT_NAME } from './core/constants';
 import { Router } from './core/router';
 import { GlobalThemeProvider, FallBack, Loader } from '@applyft-web/ui-components';
 import { Alert } from './components';
@@ -20,10 +19,9 @@ const App = () => {
 
   useInitAnalytics();
   useSetTokens();
-  useInlineScript(oneLinkSmartScript, AF_SMART_SCRIPT_KEY);
 
   return (
-    <GlobalThemeProvider projectTheme={PRODUCT_NAME} /* projectTheme={'gz'} */>
+    <GlobalThemeProvider projectTheme={PRODUCT_NAME}>
       <Suspense fallback={<FallBack />}>
         <BrowserRouter>
           <Router />

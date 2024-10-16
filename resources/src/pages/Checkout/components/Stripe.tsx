@@ -2,12 +2,11 @@ import React, { type SetStateAction, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { type Stripe } from '@stripe/stripe-js';
 import { selectEventsData, setEventData } from '../../../core/store/events';
-import { useDebounce, useSendEvents } from '../../../core/hooks';
+import { useDebounce } from '../../../core/hooks';
 import { selectPaymentError } from '../../../core/store/checkout';
 import { setShowError } from '../../../core/store/error';
 import { selectShowCheckout } from '../../../core/store/plans';
-import { EVENTS } from '../../../core/constants';
-import { CardForm } from './CardForm';
+import { CardForm } from '.';
 
 interface StripeComponentProps {
   stripePromise?: Promise<Stripe | null>;
@@ -15,7 +14,7 @@ interface StripeComponentProps {
   card: any;
   expiration: any;
   cvc: any;
-  cardholder: any;
+  cardholder?: any;
   setName: (value: string) => void;
   locale?: string;
   setIsFormValid?: (value: boolean) => void;
@@ -37,7 +36,6 @@ export const StripeCard = ({
   const [err, setErr] = useState('');
   const [isValid, setIsValid] = useState(false);
   const dispatch = useDispatch();
-  const sendEvents = useSendEvents();
   const eventsData = useSelector(selectEventsData);
   const debouncedErr = useDebounce(err, 500);
   const debouncedValidity = useDebounce(isValid, 500);
@@ -77,7 +75,7 @@ export const StripeCard = ({
   });
 
   cvc.on('change', (event: any) => {
-    event.complete && cardholder.current?.focus();
+    event.complete && cardholder?.current?.focus();
     fieldEventHandler(event, setIsCvv);
   });
 
@@ -101,9 +99,8 @@ export const StripeCard = ({
         card_brand: cardBrand,
       };
       dispatch(setEventData(localEventData));
-      sendEvents(EVENTS.CARD_BRAND_CHOSEN, localEventData);
     }
-  }, [cardBrand, eventsData, dispatch, sendEvents]);
+  }, [cardBrand, eventsData, dispatch]);
 
   useEffect(() => {
     if (debouncedErr) {
@@ -112,13 +109,13 @@ export const StripeCard = ({
   }, [debouncedErr, dispatch]);
 
   return (
-    <CardForm
-      // card={card}
-      // expiration={expiration}
-      // cvc={cvc}
-      cardholder={cardholder}
-      cardBrand={cardBrand}
-      setName={setName}
-    />
+    <CardForm {...{
+      // card,
+      // expiration,
+      // cvc,
+      cardholder,
+      cardBrand,
+      setName,
+    }}/>
   );
 };

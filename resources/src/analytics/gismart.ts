@@ -6,10 +6,6 @@ import {
   GISMART_INIT_EVENT,
 } from '../core/constants';
 
-export const GISMART_EVENTS: {[key: string]: string} = {
-  'onboarding_started': 'session_start',
-};
-
 export const initGismart = (userId: string, callback: (key: string) => void) => {
   const config = {
     apiEndpoint: GISMART_DOMAIN,

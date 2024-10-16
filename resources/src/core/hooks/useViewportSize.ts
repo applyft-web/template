@@ -8,7 +8,7 @@ const getStickyButtonStyles = (bottomPadding: number, buttonHeight: number) => {
         style: {
           top: `${height + (offsetTop || 0) - bottomPadding - buttonHeight}px`,
           bottom: 'auto',
-          boxShadow: '0 3px 0px 20px',
+          // boxShadow: '0 7px 0px 30px',
           zIndex: 1,
         },
       };

@@ -1,25 +1,20 @@
 import React from 'react';
-import { EVENTS, POLICY_LINK, TERMS_LINK } from '../../core/constants';
-import { useSendEvents } from '../../core/hooks';
+import { EVENTS as E, POLICY_LINK, TERMS_LINK } from '../../core/constants';
+import { useEventNameConstructor, useSendEvents } from '../../core/hooks';
 import * as S from './styled';
 
-export const PolicyText = () => {
-  const sendEvents = useSendEvents();
+export const PolicyText = ({ screenId = '' }: { screenId?: string }) => {
+  const sendEvents = useSendEvents({ screenId });
+  const getEventName = useEventNameConstructor({ screenId });
   const onLinkClick = (type: string) => {
     if (!type) return;
-    const links: {[key: string]: {[key: string]: string}} = {
-      terms: {
-        event: EVENTS.TERMS_TAP,
-        url: TERMS_LINK,
-      },
-      policy: {
-        event: EVENTS.POLICY_TAP,
-        url: POLICY_LINK,
-      },
+    const links: { [key: string]: string } = {
+      terms: TERMS_LINK,
+      policy: POLICY_LINK,
     };
-
-    sendEvents(links[type].event);
-    window.open(links[type].url);
+    
+    sendEvents(getEventName(E.CLICK), { [E.LR]: type })
+    window.open(links[type]);
   };
 
   return (

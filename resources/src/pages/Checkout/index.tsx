@@ -1,4 +1,11 @@
-import React, { useRef, useEffect, useState, useCallback, useLayoutEffect } from 'react';
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { PaymentRequestButtonElement, Elements } from '@stripe/react-stripe-js';
@@ -11,8 +18,9 @@ import {
   type PaymentRequest,
   type PaymentRequestPaymentMethodEvent,
 } from '@stripe/stripe-js';
+import braintree from 'braintree-web';
 import { sendPurchaseEvent, setAmplitudeUserProperties } from '../../analytics';
-import { EVENTS, PRODUCT_NAME } from '../../core/constants';
+import { EVENTS as E, PRODUCT_NAME } from '../../core/constants';
 import {
   selectEventsData,
   selectAnalyticsData,
@@ -20,6 +28,7 @@ import {
 } from '../../core/store/events';
 import {
   stripePurchase,
+  braintreePurchase,
   selectID,
   selectPaymentError,
   selectSuccess,
@@ -29,9 +38,11 @@ import {
 } from '../../core/store/checkout';
 import {
   selectToken,
+  selectBtToken,
   selectUuid,
   selectStripe,
   selectPaymentProvider,
+  selectUserLocation,
 } from '../../core/store/signup';
 import {
   selectPlan,
@@ -40,16 +51,15 @@ import {
   selectPlanCoupon,
   setShowCheckout,
 } from '../../core/store/plans';
+import { setShowLoader } from '../../core/store/loader';
 import {
   useNextPageName,
   usePreloadNextPage,
   useSendEvents,
   useCustomNavigate,
 } from '../../core/hooks';
-import { StripeCard } from './components/Stripe';
-import ErrorScreen from './components/ErrorScreen';
-import { CrossIcon } from './components/icons';
-import { ContinueButton } from '@applyft-web/ui-components';
+import { StripeCard, ErrorScreen, CrossIcon/*, getPhrase*/ } from './components';
+import { ContinueButton, PaypalButton } from '@applyft-web/ui-components';
 import { useTheme } from 'styled-components';
 import * as S from './styled';
 
@@ -77,12 +87,12 @@ const useStripeStyles = () => {
 }
 };
 
-export const Checkout = () => {
+export const Checkout = ({ screenId = '' }: { screenId?: string }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useCustomNavigate();
   const nextPage = useNextPageName();
-  const sendEvents = useSendEvents();
+  const sendEvents = useSendEvents({ screenId });
   const paymentError = useSelector(selectPaymentError);
   const eventsData = useSelector(selectEventsData);
   const planDetails = useSelector(selectPlanDetails);
@@ -91,6 +101,7 @@ export const Checkout = () => {
   const subscriptionId = useSelector(selectID);
   const userUuid = useSelector(selectUuid);
   const token = useSelector(selectToken);
+  const btToken = useSelector(selectBtToken);
   const plan = useSelector(selectPlan);
   const analyticsParams = useSelector(selectAnalyticsData);
   const showCheckout = useSelector(selectShowCheckout);
@@ -98,10 +109,12 @@ export const Checkout = () => {
   const paymentProvider = useSelector(selectPaymentProvider);
   const { show: showError } = useSelector(selectPaymentError);
   const { key: stripePk, name: stripeAccountName } = useSelector(selectStripe);
+  const userLocation = useSelector(selectUserLocation);
   const card = useRef<StripeCardNumberElement | null>(null);
   const expiration = useRef<StripeCardExpiryElement | null>(null);
   const cvc = useRef<StripeCardCvcElement | null>(null);
   const cardholder = useRef<HTMLInputElement | null>(null);
+  const paypal = useRef<any>(null);
   const [load, setLoad] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
   const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(null);
@@ -109,6 +122,7 @@ export const Checkout = () => {
   const [stripePromise, setStripePromise ] = useState<Promise<StripeType | null> | null>(null);
   const [activeTab, setActiveTab] = useState('card');
   const [wallet, setWallet] = useState<string | null>(null);
+  const [isShowPaypal, setIsShowPaypal] = useState(false);
   const cardPlaceholder = '0000 0000 0000 0000';
   const expirationPlaceholder = 'MM/YY';
   const cvcPlaceholder = 'CVV';
@@ -116,7 +130,6 @@ export const Checkout = () => {
   const isBraintree = paymentProvider === 'braintree';
   const isOnlyCardMethod = !wallet;
   const stripeFieldsStyle = useStripeStyles();
-
   const renderBrand = (card: string) => {
     if (!card || !CARD_BRANDS.includes(card)) return null;
     return (
@@ -129,7 +142,34 @@ export const Checkout = () => {
       />
     );
   };
-
+  const userPaywall = useMemo(
+    () =>
+      [
+        'AT',
+        'BE',
+        'HR',
+        'CY',
+        'EE',
+        'FI',
+        'FR',
+        'DE',
+        'GR',
+        'IE',
+        'IT',
+        'LV',
+        'LT',
+        'LU',
+        'MT',
+        'NL',
+        'PT',
+        'SK',
+        'SI',
+        'ES',
+      ].includes(userLocation)
+        ? 'eur'
+        : 'usd',
+    [userLocation]
+  );
   const stripePurchaseClick = useCallback((
     paymentMethod: PaymentRequestPaymentMethodEvent | null,
     successPayment?: () => void,
@@ -165,7 +205,7 @@ export const Checkout = () => {
         })
       );
       dispatch(setEventData(localEventsData));
-      sendEvents(EVENTS.BUY_SUBSCRIPTION_TAPPED, localEventsData);
+      sendEvents(E.BUY_SUBSCRIPTION_TAPPED, localEventsData);
       window?.ttq?.track('SubmitForm', {});
 
       stripePurchase({
@@ -195,13 +235,79 @@ export const Checkout = () => {
     sendEvents,
     couponDetails,
   ]);
+  const enablePaypal = userPaywall === 'usd';
+  const initializeBraintree = (token: string) => {
+    braintree.client.create(
+      { authorization: token },
+      (clientErr: any, clientInstance: any) => {
+        if (clientErr) {
+          console.error('Error creating client:', clientErr);
+          return;
+        }
+        if (enablePaypal) {
+          braintree.paypal.create(
+            { client: clientInstance },
+            (paypalErr: any, paypalInstance: any) => {
+              if (paypalErr) {
+                console.error('Error creating PayPal:', paypalErr);
+                return;
+              }
+              paypal.current = paypalInstance;
+              setIsShowPaypal(true);
+              setActiveTab('paypal');
+            }
+          );
+        }
+      }
+    );
+  };
+  const onPayPalClick = () => {
+    const localEventsData = { payment_method: 'Paypal' };
+    const extendedEventsData = {
+      ...eventsData,
+      ...localEventsData,
+      screenId,
+    };
+    
+    sendEvents(E.BUY_SUBSCRIPTION_TAPPED, localEventsData);
+    window?.ttq?.track('SubmitForm', {});
+    dispatch(setShowLoader(true));
 
+    paypal.current.tokenize(
+      {
+        flow: 'vault',
+        currency: 'USD',
+      },
+      (tokenizeErr: any, payload: any) => {
+        if (tokenizeErr) {
+          if (tokenizeErr.type !== 'CUSTOMER') {
+            console.error('Error tokenizing:', tokenizeErr);
+          }
+          dispatch(setShowLoader(false));
+          return;
+        }
+        
+        setAmplitudeUserProperties({ 'Payments gateways': 'Braintree' });
+        dispatch(setEventData(localEventsData));
+        braintreePurchase({
+          nonce: payload.nonce,
+          binData: null,
+          threeDSInstance: null,
+          plan,
+          token,
+          analyticsParams,
+          eventsData: extendedEventsData,
+          userUuid,
+          coupon: '',
+        })(dispatch);
+      }
+    );
+  };
   const onBackClick = () => {
-    sendEvents(EVENTS.PAYWALL_CLOSED);
+    sendEvents(E.PAYWALL_CLOSED);
     dispatch(setShowCheckout(false));
     clearFields();
   };
-
   const clearFields = () => {
     if (
       !(
@@ -220,7 +326,14 @@ export const Checkout = () => {
       });
   };
 
-  usePreloadNextPage(nextPage);
+  usePreloadNextPage();
+  
+  useEffect(() => {
+    if (btToken && enablePaypal) {
+      initializeBraintree(btToken);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [btToken, enablePaypal]);
 
   useEffect(() => {
     if (stripePk) {
@@ -259,7 +372,7 @@ export const Checkout = () => {
       setPaymentRequest(null);
       try {
         const label = `${PRODUCT_NAME} ${planDetails.description} plan`;
-        const amount = +(planDetails.periodPrice - (couponDetails?.price ?? 0)).toFixed(2) * 100;
+        const amount = +((planDetails.periodPrice - (couponDetails?.price ?? 0)) * 100).toFixed(2);
         const pr = stripeInstance.paymentRequest({
           country: 'US',
           currency: 'usd',
@@ -324,17 +437,34 @@ export const Checkout = () => {
       <S.Title>{t(isOnlyCardMethod ? 'checkout' : 'select_payment_method')}</S.Title>
       {!isOnlyCardMethod && (
         <S.Tabs>
-          <S.TabItem onClick={() => setActiveTab('card')} $isActive={activeTab === 'card'}>
-            {t('credit_card')}
-            <S.CardIconsList $mt={8}>{CARD_BRANDS.map(renderBrand)}</S.CardIconsList>
-          </S.TabItem>
+          {isShowPaypal && (
+            <S.TabItem
+              onClick={() => setActiveTab('paypal')}
+              $isActive={activeTab === 'paypal'}
+            >
+              <S.WalletIcon $img={'paypal'} />
+            </S.TabItem>
+          )}
           {paymentRequest && wallet && (
-            <S.TabItem onClick={() => setActiveTab('wallet')} $isActive={activeTab === 'wallet'}>
+            <S.TabItem
+              onClick={() => setActiveTab('wallet')}
+              $isActive={activeTab === 'wallet'}
+            >
               <S.WalletIcon $img={wallet} />
             </S.TabItem>
           )}
+          <S.TabItem
+            onClick={() => setActiveTab('card')}
+            $isActive={activeTab === 'card'}
+          >
+            {t('credit_card')}
+            <S.CardIconsList $mt={8}>{CARD_BRANDS.map(renderBrand)}</S.CardIconsList>
+          </S.TabItem>
         </S.Tabs>
       )}
+      <S.PaymentBlock $show={activeTab === 'paypal'}>
+        {isShowPaypal && <PaypalButton onClick={onPayPalClick} />}
+      </S.PaymentBlock>
       <S.PaymentBlock $show={activeTab === 'card'}>
         {
           load && (

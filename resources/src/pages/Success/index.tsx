@@ -2,17 +2,18 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { selectDeepLinkUrl } from '../../core/store/signup';
-import { useSendEvents } from '../../core/hooks';
-import { EVENTS } from '../../core/constants';
+import { useEventNameConstructor, useSendEvents } from '../../core/hooks';
+import { EVENTS as E } from '../../core/constants';
 import { CheckIcon, ContinueButton, MarketsButton } from '@applyft-web/ui-components';
 import * as S from './styled';
 
-const Success = () => {
+const Success = ({ screenId = '' }: { screenId?: string }) => {
   const { t } = useTranslation();
-  const sendEvents = useSendEvents();
+  const sendEvents = useSendEvents({ screenId });
+  const getEventName = useEventNameConstructor({ screenId });
   const deepLinkUrl = useSelector(selectDeepLinkUrl);
   const onButtonClick = () => {
-    sendEvents(EVENTS.DOWNLOAD_TAP);
+    sendEvents(getEventName(E.CLICK), { [E.OR]: 'continue' });
     window.open(deepLinkUrl);
   };
   const steps = [
@@ -28,8 +29,8 @@ const Success = () => {
   );
 
   useEffect(() => {
-    sendEvents(EVENTS.SUCCESS_PAGE_SHOWN);
-  }, [sendEvents]);
+    sendEvents(getEventName(E.LOAD), { [E.SL]: screenId });
+  }, [sendEvents, getEventName, screenId]);
 
   return (
     <div className={'scrollable'}>

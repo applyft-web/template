@@ -1,16 +1,29 @@
 import React from 'react';
 import * as LC from './lazyComponents';
 import { landingTypesList } from './landingTypes';
+import { MainLayoutCustomStylesWithStatesProps } from '@applyft-web/ui-components';
 
-export interface configProps {
-  readonly component: LC.LazyComponentWithPreload<React.ComponentType<any>>;
-  readonly images?: string[];
+export interface CommonProps {
+  readonly withButton?: boolean;
+  readonly withoutWrap?: boolean;
+  readonly withPolicyText?: boolean;
+  readonly wrapperProps?: {
+    adaptive?: boolean;
+    customStyles?: MainLayoutCustomStylesWithStatesProps
+  };
 }
 
-export const pagesConfig: { [key: string]: configProps } = {
+export interface ConfigProps extends CommonProps {
+  readonly component: LC.LazyComponentWithPreload<React.ComponentType<any>>;
+  readonly images?: string[];
+  readonly componentProps?: object;
+}
+
+export const pagesConfig: { [key: string]: ConfigProps } = {
   ...landingTypesList.reduce((obj: { [key: string]: any }, type: string) => {
     obj[type] = {
       component: LC.WelcomeScreen,
+      withPolicyText: type,
     };
     return obj;
   }, {}),
@@ -27,9 +40,15 @@ export const pagesConfig: { [key: string]: configProps } = {
       './assets/images/reviewers/review_5.png',
       './assets/images/reviewers/review_6.png',
     ],
+    withButton: false,
+    wrapperProps: {
+      customStyles: { default: 'justify-content: space-between;' },
+    },
+    componentProps: { screenId: 'creating_profile' },
   },
   '/signup': {
     component: LC.Signup,
+    componentProps: { screenId: 'signup' },
   },
   '/checkout': {
     component: LC.PlansCheckout,
@@ -46,51 +65,45 @@ export const pagesConfig: { [key: string]: configProps } = {
       './assets/images/wallets/googlePay.png',
       './assets/images/payment-declined.png',
     ],
+    withButton: false,
+    componentProps: {
+      popupStyle: true,
+    },
+    wrapperProps: {
+      customStyles: { tablet: 'justify-content: flex-start;' },
+    },
   },
   '/success': {
     component: LC.Success,
     images: [
       './assets/images/logo.png',
     ],
+    withButton: false,
+    componentProps: { screenId: 'success' },
   },
 };
 
-export interface routesProps {
+export interface RoutesProps extends CommonProps {
   readonly path: string;
   readonly element: React.JSX.Element;
-  readonly withoutWrap?: boolean;
-  readonly withButton?: boolean;
-  readonly withPolicyText?: boolean;
-  readonly wrapperCustomStyles?: string;
 }
 
-const pagesWithoutFixedButton = ['/creating-profile', '/checkout', '/success'];
-
-export const pagesRoutes: routesProps[] = Object.keys(pagesConfig).map((path) => {
-  const customStyles: { [key: string]: any } = {
-    '/checkout': { tablet: 'justify-content: flex-start;' },
-    '/creating-profile': 'justify-content: space-between;',
-  };
-  const componentsProps: { [key: string]: object } = {
-    '/checkout': {
-      popupStyle: true,
-    },
-    '/signup': {
-      awesomeProp: '(no)',
-    },
-  };
-  const withButton = !pagesWithoutFixedButton.includes(path);
-  const withPolicyText = [...landingTypesList].includes(path);
-  const withoutWrap = false;
-  const wrapperCustomStyles = customStyles[path] || '';
-  const Comp = pagesConfig[path].component;
+export const pagesRoutes: RoutesProps[] = Object.keys(pagesConfig).map((path) => {
+  const {
+    component: Comp,
+    componentProps,
+    wrapperProps,
+    withButton = true,
+    withPolicyText,
+    withoutWrap,
+  } = pagesConfig[path];
 
   return {
     path,
-    element: <Comp {...componentsProps[path]} />,
+    element: <Comp {...componentProps} />,
     withButton,
     withPolicyText,
     withoutWrap,
-    wrapperCustomStyles,
+    wrapperProps,
   };
 });

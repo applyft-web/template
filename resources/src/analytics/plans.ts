@@ -4,11 +4,11 @@ export interface PlanInfoProps {
     price: number,
     periodPrice: number,
     description: string,
-    disclaimer: string,
+    disclaimer?: string,
     product_id: string,
     duration: string,
-    currency: string, // 'USD' | 'EUR' | 'MXN',
-    currencySymbol: string, // '$' | '€' | 'Mex$',
+    currency?: string, // 'USD' | 'EUR' | 'MXN',
+    currencySymbol?: string, // '$' | '€' | 'Mex$',
   };
 }
 

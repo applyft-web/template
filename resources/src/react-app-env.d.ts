@@ -17,8 +17,11 @@ declare namespace NodeJS {
     REACT_APP_LOCKER_STUDIO_DOMAIN: string;
     REACT_APP_FB_PIXEL_ID: string;
     REACT_APP_ENABLE_PAYPAL: string;
+    REACT_APP_GOOGLE_API_KEY: string;
     REACT_APP_GOOGLE_PAY_MERCHANT_ID: string;
     REACT_APP_GOOGLE_MEASUREMENT_ID: string;
+    REACT_APP_GOOGLE_ADS_ID: string;
     REACT_APP_TIKTOK_PIXEL_ID: string;
+    REACT_APP_HOTJAR_ID: string;
   }
 }

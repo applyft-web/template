@@ -2,8 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { isAndroid, isDesktop, isIOS, osName, osVersion } from 'react-device-detect';
+// import ReactGA from 'react-ga4';
 import { useCustomNavigate, useNextPageName, useSendEvents } from '../../core/hooks';
-import { EVENTS, PRODUCT_NAME } from '../../core/constants';
+import {
+  EVENTS as E,
+  PRODUCT_NAME,
+  /*GOOGLE_ADS_ID,
+  GOOGLE_ADS_OB_START_ID,*/
+} from '../../core/constants';
 import { setPaywallType } from '../../core/store/plans';
 import { setEventData } from '../../core/store/events';
 import { setFlow } from '../../core/store/app';
@@ -87,8 +93,14 @@ const WelcomeScreen = () => {
   }, [dispatch, landingType, location, paywallType, eventParams, landingParam]);
 
   useEffect(() => {
-    if (eventParams) sendEvents(EVENTS.ONBOARDING_STARTED);
+    if (eventParams) sendEvents(E.SESSION_START);
   }, [eventParams, sendEvents]);
+
+ /* useEffect(() => {
+    ReactGA.event('conversion', {
+      send_to: `${GOOGLE_ADS_ID}/${GOOGLE_ADS_OB_START_ID}`,
+    });
+  }, []);*/
 
   return (
     <>

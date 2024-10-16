@@ -29,7 +29,7 @@ const reducers = combineReducers({
 const persistConfig = {
   key: 'root',
   storage: sessionStorage,
-  whitelist: ['app', 'events', 'plans', 'signup'],
+  whitelist: ['app', 'events', 'plans', 'signup', 'checkout'],
   version: 0,
   migrate: createMigrate(migrations, { debug: false })
 };

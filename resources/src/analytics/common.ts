@@ -1,19 +1,22 @@
 import { sendAFEvent, setAFCustomerId } from './appsflyer';
 import { sendAmplitudeData, setAmplitudeUserId } from './amplitude';
-import { sendGismartData, GISMART_EVENTS } from './gismart';
+import { sendGismartData } from './gismart';
 import { sendLockerStudioData } from './lockerStudio';
-import { ENV } from '../core/constants';
+import {
+  ENV,
+  GOOGLE_MEASUREMENT_ID,
+  /*GOOGLE_ADS_ID,
+  GOOGLE_ADS_CONVERSION_ID,*/
+} from '../core/constants';
 import ReactGA from 'react-ga4';
 
 const isDev = ENV === 'development';
 
 export const sendAnalyticsEvents = (eventName: string, eventParams: any) => {
-  const gismartEventName = GISMART_EVENTS[eventName];
-
   sendAFEvent(eventName, eventParams);
   sendAmplitudeData(eventName, eventParams);
-  sendGismartData(gismartEventName ?? eventName, eventParams);
-  sendLockerStudioData(gismartEventName ?? eventName, eventParams);
+  sendGismartData(eventName, eventParams);
+  sendLockerStudioData(eventName, eventParams);
   pushGoogleTag(eventName, eventParams);
 };
 
@@ -25,11 +28,19 @@ interface PurchaseEventProps {
   uuid: string;
   gclid?: string;
   pixelName: string;
+  customEventId?: string;
 }
 
-export const sendPurchaseEvent = (props: PurchaseEventProps) => {
-  const { price, currency, plan, subscriptionId, uuid, gclid, pixelName } = props;
-
+export const sendPurchaseEvent = ({
+  price,
+  currency,
+  plan,
+  subscriptionId,
+  uuid,
+  gclid,
+  pixelName,
+  customEventId,
+}: PurchaseEventProps) => {
   if (pixelName === 'fb') {
     pushFBEvent(
       {
@@ -39,7 +50,7 @@ export const sendPurchaseEvent = (props: PurchaseEventProps) => {
         price: price,
         value: price,
       },
-      `${uuid}_purchase`
+      customEventId || `${uuid}_purchase`
     );
   } else if ('ttq') {
     window?.ttq?.track('CompletePayment', {
@@ -65,7 +76,15 @@ export const sendPurchaseEvent = (props: PurchaseEventProps) => {
         item_id: plan,
         item_name: plan,
       },
+      
+      send_to: GOOGLE_MEASUREMENT_ID,
     });
+    /*ReactGA.event('conversion', {
+      send_to: `${GOOGLE_ADS_ID}/${GOOGLE_ADS_CONVERSION_ID}`,
+      value: price,
+      currency: currency || 'USD',
+      transaction_id: subscriptionId,
+    });*/
   }
 };
 
@@ -74,11 +93,11 @@ export const setAnalyticsUserId = (userId: string) => {
   setAFCustomerId(userId);
 };
 
-export const pushGoogleTag = (eventName: string, eventParams: any) => {
+export const pushGoogleTag = (eventName: string, eventParams: any, tagId = GOOGLE_MEASUREMENT_ID) => {
   if (isDev) return;
-  window.gtag?.('event', eventName, eventParams);
+  ReactGA.event(eventName, { ...eventParams, send_to: tagId });
 };
 
 export const pushFBEvent = (data: any, eventId: string) => {
-  window.fbq?.('track', 'Purchase'+(isDev ? '_test' : ''), data, {eventID: eventId});
+  window.fbq?.('track', 'Purchase'+(isDev ? '_test' : ''), data, { eventID: eventId });
 };

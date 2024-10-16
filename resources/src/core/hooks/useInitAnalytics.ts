@@ -3,21 +3,34 @@ import Cookies from 'js-cookie';
 import FacebookPixel from 'react-facebook-pixel';
 import GA4 from 'react-ga4';
 import { initAmplitude, initGismart, initLockerStudio } from '../../analytics';
-import { COOKIE_UUID_KEY, FB_PIXEL_ID, GOOGLE_MEASUREMENT_ID } from '../constants';
+import {
+  AF_SMART_SCRIPT_KEY,
+  COOKIE_UUID_KEY,
+  FB_PIXEL_ID,
+  GOOGLE_MEASUREMENT_ID,
+  GOOGLE_ADS_ID,
+  TIKTOK_KEY,
+  HOTJAR_ID,
+} from '../constants';
 import { useInlineScript } from './useInlineScript';
-import { tiktok } from '../scripts';
+import { hotjar, tiktok, oneLinkSmartScript } from '../scripts';
 import { queryParser } from '@applyft-web/utils';
 
 export const useInitAnalytics = () => {
   const { fbclid, ttclid } = queryParser(window.location.search);
   const tiktokScript = ttclid ? tiktok : '';
+  const hotjarScript = HOTJAR_ID ? hotjar : '';
   const initCallback = (analytics: string) => {
     window.sessionStorage?.setItem(`${analytics}Init`, 'true');
   };
-
+  
   useEffect(() => {
-    if (GOOGLE_MEASUREMENT_ID) {
-      GA4.initialize(GOOGLE_MEASUREMENT_ID);
+    const initOptionsList = [
+      { trackingId: GOOGLE_MEASUREMENT_ID },
+      { trackingId: GOOGLE_ADS_ID },
+    ];
+    if (GOOGLE_MEASUREMENT_ID && GOOGLE_ADS_ID) {
+      GA4.initialize(initOptionsList);
     }
   });
 
@@ -41,5 +54,9 @@ export const useInitAnalytics = () => {
     }, 500);
   });
 
-  useInlineScript(tiktokScript, 'TiktokJelly');
+  useInlineScript(tiktokScript, TIKTOK_KEY);
+
+  useInlineScript(oneLinkSmartScript, AF_SMART_SCRIPT_KEY);
+  
+  useInlineScript(hotjarScript, 'hj');
 };

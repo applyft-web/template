@@ -1,5 +1,5 @@
 import React from 'react';
-import { getPhrase } from '../phrases';
+import { getPhrase } from '..';
 import { cardBrandsIcons } from '../icons';
 import * as S from './styled';
 

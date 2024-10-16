@@ -2,22 +2,23 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { setEventData } from '../../core/store/events';
-import { EVENTS } from '../../core/constants';
+import { EVENTS as E } from '../../core/constants';
 import {
   useNextPageName,
   usePreloadNextPage,
   useSendEvents,
   useEngString,
-  useCustomNavigate,
+  useCustomNavigate, useEventNameConstructor,
 } from '../../core/hooks';
 import { QuizPageContainer } from '../../containers';
 
-const Q = () => {
+const Q = ({ screenId = 'q' }: { screenId?: string }) => {
   const { t,  } = useTranslation();
   const navigate = useCustomNavigate();
   const dispatch = useDispatch();
   const nextPage = useNextPageName();
-  const sendEvents = useSendEvents();
+  const sendEvents = useSendEvents({ screenId });
+  const getEventName = useEventNameConstructor({ screenId });
   const getEngString = useEngString();
   const titleKey = 'which_abilities';
   const title: string = t(titleKey);
@@ -30,7 +31,7 @@ const Q = () => {
       question: getEngString(titleKey),
       answer,
     };
-    sendEvents(EVENTS.QUESTION_SUBMITTED, eventParams);
+    sendEvents(getEventName(E.CLICK), { [E.OC]: screenId, ...eventParams });
     dispatch(setEventData(localEventParams));
     navigate(nextPage);
   };
@@ -46,7 +47,7 @@ const Q = () => {
     'learning_efficiency_and_speed',
   ];
 
-  usePreloadNextPage(nextPage);
+  usePreloadNextPage();
 
   return (
     <QuizPageContainer

@@ -8,12 +8,13 @@ import App from './App';
 
 declare global {
   interface Window {
-    ga: any
-    fbq: any
-    AF: any
-    gtag: any
-    ttq: any
-    AF_SMART_SCRIPT: any
+    ga: any;
+    fbq: any;
+    AF: any;
+    gtag: any;
+    ttq: any;
+    AF_SMART_SCRIPT: any;
+    google: any;
   }
 }
 

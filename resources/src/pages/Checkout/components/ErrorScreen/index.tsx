@@ -2,16 +2,13 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectPaymentError, setShowPaymentError } from '../../../../core/store/checkout'
-import { EVENTS } from '../../../../core/constants'
-import { useSendEvents } from '../../../../core/hooks';
 import { ArabicContext } from '../../../../App';
 import { ContinueButton } from '@applyft-web/ui-components';
 import * as S from './styled';
 
-const ErrorScreen = ({ clearFields }: { clearFields: () => void }) => {
+export const ErrorScreen = ({ clearFields }: { clearFields: () => void }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const sendEvents = useSendEvents();
   const isArabic = useContext(ArabicContext);
   const { message } = useSelector(selectPaymentError);
   const POINTS = ['your_card_balance', 'limits_on_card', 'contact_card_issue'];
@@ -23,7 +20,6 @@ const ErrorScreen = ({ clearFields }: { clearFields: () => void }) => {
   const tryAgainClick = () => {
     clearFields();
     dispatch(setShowPaymentError(false));
-    sendEvents(EVENTS.DECLINE_TRY_AGAIN);
   };
 
   return (
@@ -39,5 +35,3 @@ const ErrorScreen = ({ clearFields }: { clearFields: () => void }) => {
     </S.ModalWrapper>
   )
 };
-
-export default ErrorScreen

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectShowCheckout, setShowCheckout } from '../../core/store/plans';
 import { setDeepLinkUrl } from '../../core/store/signup';
 import { useGenerateDeepLink, useSendEvents } from '../../core/hooks';
-import { EVENTS } from '../../core/constants';
+import { EVENTS as E } from '../../core/constants';
 import { Plans } from '../Plans';
 import { Checkout } from '../Checkout';
 import { MainLayout } from '@applyft-web/ui-components';
@@ -22,12 +22,12 @@ const PlansCheckout = (props: any) => {
 
   useEffect(() => {
     if (showCheckout && !checkoutEventSent) {
-      sendEvents(EVENTS.CHECKOUT_SHOWN);
+      sendEvents(E.CHECKOUT_SHOWN);
       setCheckoutEventStatus(true);
       setPlansEventStatus(false);
       document.body.style.overflow = 'hidden';
     } else if (!showCheckout && !plansEventSent) {
-      sendEvents(EVENTS.PAYWALL_SHOWN);
+      sendEvents(E.PAYWALL_SHOWN);
       setCheckoutEventStatus(false);
       setPlansEventStatus(true);
       document.body.style.overflow = 'initial';

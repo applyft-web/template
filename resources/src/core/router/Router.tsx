@@ -1,29 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import {
   useLocation,
   useRoutes,
   Navigate,
 } from 'react-router-dom';
-import { pagesWithProgressBar } from './pagesWithProgressBar';
-import { pagesRoutes , type routesProps } from './pagesConfig';
+import { selectPaywallType } from '../store/plans';
+import { ProgressBarLists } from './pagesWithProgressBar';
+import { pagesRoutes , type RoutesProps, type CommonProps } from './pagesConfig';
 import { useCustomNavigate } from '../hooks';
 import { PolicyText } from '../../components';
-import { ProgressBar, MainLayout, type MainLayoutCustomStylesWithStatesProps } from '@applyft-web/ui-components';
+import { ProgressBar, MainLayout } from '@applyft-web/ui-components';
 
-interface RouteWithAppContainerProps {
+interface RouteWithAppContainerProps extends CommonProps{
   element: React.JSX.Element;
-  progressBarIndex: number;
-  withButton?: boolean;
-  withPolicyText?: boolean;
-  wrapperCustomStyles?: MainLayoutCustomStylesWithStatesProps | string;
+  progressBarProps: {
+    index: number;
+    length: number;
+  };
 }
 
 const RouteWithAppContainer = ({
   element,
-  progressBarIndex,
+  progressBarProps: {
+    index: progressBarIndex,
+    length: progressBarLength,
+  },
   withButton = true,
   withPolicyText,
-  wrapperCustomStyles = '',
+  wrapperProps = {},
 }: RouteWithAppContainerProps) => {
   const buttonHeight = withButton ? 88 : 0;
   const textHeight = withPolicyText ? 60 : 0;
@@ -35,11 +40,11 @@ const RouteWithAppContainer = ({
     <MainLayout
       pt={pt}
       pb={pb}
-      customStyles={wrapperCustomStyles}
+      {...wrapperProps}
     >
       {withProgressBar && (
         <ProgressBar
-          totalCount={pagesWithProgressBar.length}
+          totalCount={progressBarLength}
           currentRoute={progressBarIndex}
         />
       )}
@@ -49,7 +54,7 @@ const RouteWithAppContainer = ({
   );
 };
 
-const routes: routesProps[] = [
+const routes: RoutesProps[] = [
   ...pagesRoutes,
   {
     path: '*',
@@ -60,6 +65,11 @@ const routes: routesProps[] = [
 export const Router = () => {
   const { pathname, search } = useLocation();
   const navigate = useCustomNavigate();
+  const paywallType = useSelector(selectPaywallType);
+  const pagesWithProgressBar = useMemo(
+    () => ProgressBarLists[paywallType],
+    [paywallType]
+  );
 
   useEffect(() => window.scrollTo(0, 0));
 
@@ -82,16 +92,20 @@ export const Router = () => {
       return route;
     }
 
+    const { path, element, withButton, withPolicyText, wrapperProps } = route;
     return {
       ...route,
       element: (
-        <RouteWithAppContainer
-          element={route.element}
-          withButton={route.withButton}
-          withPolicyText={route.withPolicyText}
-          progressBarIndex={pagesWithProgressBar.indexOf(route.path)}
-          wrapperCustomStyles={route.wrapperCustomStyles}
-        />
+        <RouteWithAppContainer{...{
+          element,
+          withButton,
+          withPolicyText,
+          progressBarProps: {
+            index: pagesWithProgressBar?.indexOf(path),
+            length: pagesWithProgressBar?.length,
+          },
+          wrapperProps,
+        }}/>
       ),
     };
   });

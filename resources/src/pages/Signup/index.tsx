@@ -18,9 +18,10 @@ import {
   useSendEvents,
   useViewportSize,
   useCustomNavigate,
+  useEventNameConstructor,
 } from '../../core/hooks';
 import { setEventData } from '../../core/store/events';
-import { EVENTS } from '../../core/constants';
+import { EVENTS as E } from '../../core/constants';
 import { ReviewsBlock } from '../../components';
 import { ContinueButton, SignupInput } from '@applyft-web/ui-components';
 
@@ -29,12 +30,13 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
 
 const isArabic = navigator.language.startsWith('ar');
 
-const Signup = () => {
+const Signup = ({ screenId = 'signup' }: { screenId?: string }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useCustomNavigate();
   const nextPage = useNextPageName();
-  const sendEvents = useSendEvents();
+  const sendEvents = useSendEvents({ screenId });
+  const getEventName = useEventNameConstructor({ screenId });
   const buttonStyles = useViewportSize();
   const email = useSelector(selectEmail);
   const isEmailValid = useSelector(selectEmailValidity);
@@ -57,7 +59,7 @@ const Signup = () => {
   const submitEmail = () => {
     window?.ttq?.track('Contact', {});
     const eventParams = { email };
-    sendEvents(EVENTS.ENTER_EMAIL_SUBMITTED, eventParams);
+    sendEvents(getEventName(E.CLICK), { [E.BC]: screenId, ...eventParams });
     dispatch(setEventData(eventParams));
     sendSignupRequest({
       email,
@@ -66,13 +68,13 @@ const Signup = () => {
     })(dispatch);
   };
 
-  usePreloadNextPage(nextPage);
+  usePreloadNextPage();
 
   useEffect(() => {
     if (initEventSent) return;
-    sendEvents(EVENTS.ENTER_EMAIL_SHOWN);
+    sendEvents(getEventName(E.LOAD), { [E.SL]: screenId });
     setInitEventStatus(true);
-  }, [sendEvents, initEventSent]);
+  }, [sendEvents, initEventSent, screenId, getEventName]);
 
   useEffect(() => {
     const isEmailValid = EMAIL_REGEX.test(value);
@@ -87,7 +89,7 @@ const Signup = () => {
 
   useEffect(() => {
     if (isSuccess && paymentSettingsStatus) {
-      sendEvents(EVENTS.SIGNUP_SUCCESS);
+      sendEvents(E.LEAD);
       window?.ttq?.track('CompleteRegistration', {});
       navigate(nextPage);
     }

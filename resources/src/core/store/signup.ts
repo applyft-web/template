@@ -34,6 +34,7 @@ export const signupSlice = createSlice({
     paymentProvider: null,
     paymentSettingsStatus: null,
     threeDS: 0,
+    userLocation: null,
   },
   reducers: {
     setUserUuid: (state, action: PayloadAction<string>) => {
@@ -79,6 +80,9 @@ export const signupSlice = createSlice({
     setThreeDS: (state, action: PayloadAction<number>) => {
       state.threeDS = action.payload;
     },
+    setUserLocation: (state, action) => {
+      state.userLocation = action.payload;
+    },
   },
 });
 
@@ -94,6 +98,7 @@ export const {
   setBtToken,
   setThreeDS,
   setDeepLinkUrl,
+  setUserLocation,
 } = signupSlice.actions;
 
 interface SignupParams {
@@ -123,6 +128,7 @@ export const sendSignupRequest = ({
     .then((data) => {
       window.sessionStorage.setItem(SESSION_STORAGE_TOKEN_KEY, data.data.access_token);
       dispatch(setRequestResult(data.data));
+      dispatch(getUserLocation());
       getPaymentSettings(data.data.access_token)(dispatch);
       setAnalyticsUserId(data.data.entity.external_user_id);
     })
@@ -205,6 +211,12 @@ export const setUuid = (userUuid: string = '') => (dispatch: Dispatch) => {
   dispatch(setEventData({ userUuid: uuid }));
 };
 
+export const getUserLocation = (): any => (dispatch: Dispatch) => {
+  fetchWrapper(`${API_URL}/cf-country`)
+    .then((data) => dispatch(setUserLocation(data?.country_code || null)))
+    .catch((error) => console.error(error));
+};
+
 export const selectIsSuccess = (state: any) => state.signup.isSuccess;
 export const selectPaymentSettingsStatus = (state: any) => state.signup.paymentSettingsStatus;
 export const selectEmail = (state: any) => state.signup.email;
@@ -218,5 +230,6 @@ export const selectBtToken = (state: any) => state.signup.btToken;
 export const selectDeeplinkToken = (state: any) => state.signup.deeplinkToken;
 export const selectDeepLinkUrl = (state: any) => state.signup.deepLinkUrl;
 export const selectThreeDS = (state: any) => state.signup.threeDS;
+export const selectUserLocation = (state: any) => state.signup.userLocation;
 
 export default signupSlice.reducer;

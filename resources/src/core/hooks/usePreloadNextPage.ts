@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import { pagesConfig } from '../router';
 import { usePreloadImages } from './usePreloadImages';
+import { useNextPageName } from './useNextPageName';
 
-export const usePreloadNextPage = (nextPage: string) => {
+export const usePreloadNextPage = () => {
+  const nextPage = useNextPageName();
+
   useEffect(() => {
     if (!pagesConfig[nextPage]) return;
     pagesConfig[nextPage].component.preload();
