@@ -49,13 +49,6 @@ const Signup = ({ screenId = 'signup' }: { screenId?: string }) => {
   const [initEventSent, setInitEventStatus] = useState(false);
   const debouncedEmail = useDebounce(value, 200);
   const placeholder = t('email_placeholder');
-  const inputCustomStyles: string = `
-    margin-top: 24px;
-    
-    &::placeholder {
-      width: 60%;
-    }
-  `;
   const submitEmail = () => {
     window?.ttq?.track('Contact', {});
     const eventParams = { email };
@@ -104,7 +97,6 @@ const Signup = ({ screenId = 'signup' }: { screenId?: string }) => {
         setValue={setValue}
         submitEmail={submitEmail}
         isArabic={isArabic}
-        customStyles={inputCustomStyles}
       />
       <ReviewsBlock mt={32} />
       <ContinueButton onClick={submitEmail} disabled={!isEmailValid} {...buttonStyles} />
